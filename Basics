@@ -18,3 +18,31 @@ Optional -> value or nil
 let city: String ?
 let defaultCity = "London"
 let greetings = "Hello from \(city ?? defaultCity)".
+
+Switches support any kind of data and a wide variety of comparison 
+operations — they aren’t limited to integers and tests for equality.
+
+for-in -> Iterate over dictionary 
+
+Dictionaries are unordered collections, so their keys and values are iterated over in an arbitrary order. 
+
+Use while -> to repeat a block of code until a condition changes. 
+
+Range Index -> ..< to make a range that omits its upper value 
+... to make a range that includes both values.
+
+Tuple -> make a compound value. To return multiple values from Function. 
+
+Functions - can be nested, are first-class type - function can return another function as its value. Function can take another function 
+as its argument. 
+
+Closure - Blocks of code that can be called later. 
+Closure has access to variables, functions that were available in the scope where the closure was created, 
+even if the closure is in different scope when executed. 
+
+Class - class followed by the class's name create a class. 
+A property declaration in a class is written the same way as a constant or variable declaration, except it's context of a class. 
+
+Create an instance of a class by putting parentheses after the class name. Use dot syntax to access the properties and 
+methods of the instance.
+
