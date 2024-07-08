@@ -1,0 +1,10 @@
+Let - do define a constant, it means you can use the constant multiple places but assign a value once only
+Var - do define a variable. 
+
+let, var - types can be inferred by compiler based on the value assigned. 
+
+Values are never implicitly converted to another type. 
+If you need to convert a value to a different type, explicitly make an instance of the desired type.
+
+Control flow 
+if, switch -> make conditions 
