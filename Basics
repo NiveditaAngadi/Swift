@@ -15,6 +15,11 @@ Optional -> value or nil
 ? -> mark after the type of a value to mark the value as optional. 
 ?? -> Provided default value
 
+When working with optional values, you can write ? before operations like methods, properties, 
+and subscripting. If the value before the ? is nil, everything after the ? is ignored and the value of the whole 
+expression is nil. Otherwise, the optional value is unwrapped, and everything after the ? acts on the unwrapped value. 
+In both cases, the value of the whole expression is an optional value.
+
 let city: String ?
 let defaultCity = "London"
 let greetings = "Hello from \(city ?? defaultCity)".
@@ -45,4 +50,157 @@ A property declaration in a class is written the same way as a constant or varia
 
 Create an instance of a class by putting parentheses after the class name. Use dot syntax to access the properties and 
 methods of the instance.
+
+init -> Initialiser helps to set up the class when an instance is created. 
+deinit -> Use deinit to create a deinitializer if you need to perform some cleanup before the object is deallocated.
+
+Methods on a subclass that override the superclass’s implementation are marked with override
+
+Properties can have getter and setter methods. 
+
+    var perimeter: Double {
+        get {
+             return 3.0 * sideLength
+        }
+        set {
+            sideLength = newValue / 3.0
+        }
+    }
+
+In the setter for perimeter, the new value has the implicit name newValue. 
+You can provide an explicit name in parentheses after set.
+
+If you don’t need to compute the property but still need to provide code that’s run before and after setting a new value, 
+use willSet and didSet. 
+
+enum -> creates an enumeration. 
+Can have methods associates with it. 
+By default, Swift assigns the raw values starting at zero and incrementing by one each time, but you can change this 
+behavior by explicitly specifying values.
+
+You can also use strings or floating-point numbers as the raw type of an enumeration. 
+Use the rawValue property to access the raw value of an enumeration case.
+
+Use the init?(rawValue:) initializer to make an instance of an enumeration from a raw value. 
+It returns either the enumeration case matching the raw value or nil if there’s no matching Rank.
+
+Raw and Associated values in enum. 
+If an enumeration has raw values, those values are determined as part of the declaration, which means every instance of a particular enumeration case always has the same raw value. 
+Another choice for enumeration cases is to have values associated with the case — these values are determined when you make the instance, 
+and they can be different for each instance of an enumeration case. You can think of the associated values as behaving like stored properties of the enumeration case instance.
+
+structure -> 
+Use struct to create a structure.
+Structures support many of the same behaviors as classes, including methods and initializers. 
+One of the most important differences between structures and classes is that structures are always
+copied when they’re passed around in your code, but classes are passed by reference.
+
+Concurrency -> 
+Use async to mark a function that runs asynchronously.
+func fetchUserID(from server: String) async -> Int {
+    if server == "primary" {
+        return 97
+    }
+    return 501
+}
+
+You mark a call to an asynchronous function by writing await in front of it.
+
+func fetchUsername(from server: String) async -> String {
+    let userID = await fetchUserID(from: server)
+    if userID == 501 {
+        return "John Appleseed"
+    }
+    return "Guest"
+}
+
+Use "async let" to call asynchronous function, letting it run in parallel with other asynchronous code. 
+When you use the value it returns, write await. 
+func connectUser(to server: String) async {
+    async let userID = fetchUserID(from: server)
+    async let username = fetchUsername(from: server)
+    let greeting = await "Hello \(username), user ID \(userID)"
+    print(greeting)
+}
+
+Use "Task" to call asynchronous functions from synchronous code, without waiting for them to return. 
+Task {
+    await connectUser(to: "primary")
+}
+
+Use "task groups" to structure concurrent code. 
+let userIDs = await withTaskGroup(of: Int.self) { group in
+    for server in ["primary", "secondary", "development"] {
+        group.addTask {
+            return await fetchUserID(from: server)
+        }
+    }
+
+
+    var results: [Int] = []
+    for await result in group {
+        results.append(result)
+    }
+    return results
+}
+
+Actors -> Simillar to Class, except they ensure that different asynchronous 
+functions can safely interact with an instance of the same actor at the same time.
+
+actor ServerConnection {
+    var server: String = "primary"
+    private var activeUsers: [Int] = []
+    func connect() async -> Int {
+        let userID = await fetchUserID(from: server)
+        // ... communicate with server ...
+        activeUsers.append(userID)
+        return userID
+    }
+}
+When you call a method on an actor or access one of its properties,
+you mark that code with await to indicate that it might have to wait for other code that’s already running on the actor to finish.
+let server = ServerConnection()
+
+let userID = await server.connect()
+
+Protocols -> Use protocol to declare a protocol. 
+Classes, enumerations, and structures can all adopt protocols.
+
+You can use an extension to add protocol conformance to a type that’s declared elsewhere, 
+or even to a type that you imported from a library or framework.
+
+You can use a protocol name just like any other named type — for example, to create a collection of objects that have different types but that all conform to a single protocol. 
+When you work with values whose type is a boxed protocol type, methods outside the protocol definition aren’t available.
+
+Error Handling
+You represent errors using any type that adopts the Error protocol.
+
+enum PrinterError: Error {
+    case outOfPaper
+    case noToner
+    case onFire
+}
+Use throw to throw an error and throws to mark a function that can throw an error. 
+
+If you throw an error in a function, the function returns immediately and the code that called the function handles the error.
+
+Various ways to handle errors.
+1. do-catch block 
+Inside the do block, you mark code that can throw an error by writing try in front of it. 
+Inside the catch block, the error is automatically given the name error unless you give it a different name.
+
+2. Use try? - to convert the result to an optional. 
+If the function throws an error, the specific error is discarded and the result is nil. 
+Otherwise, the result is an optional containing the value that the function returned.
+
+Defer:
+Use defer to write a block of code that’s executed after all other code in the function, just before the function returns. 
+The code is executed regardless of whether the function throws an error. 
+You can use defer to write setup and cleanup code next to each other, even though they need to be executed at different times.
+
+Generics:
+Write a name inside brackets to make a generic function or type. 
+
+You can make generic forms of functions and methods, as well as classes, enumerations, and structures.
+
 
