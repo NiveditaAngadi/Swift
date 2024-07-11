@@ -203,4 +203,22 @@ Write a name inside brackets to make a generic function or type.
 
 You can make generic forms of functions and methods, as well as classes, enumerations, and structures.
 
+Assertions and Preconditions:
+Assertions and preconditions are checks that happen at runtime. 
+You use them to make sure an essential condition is satisfied before executing any further code. 
+You use assertions and preconditions to express the assumptions you make and the expectations you have while coding, so you can include them as part of your code. 
+Assertions help you find mistakes and incorrect assumptions during development, and preconditions help you detect issues in production.
+
+The difference between assertions and preconditions is in when they’re checked: 
+Assertions are checked only in debug builds, but preconditions are checked in both debug and production builds. 
+In production builds, the condition inside an assertion isn’t evaluated. 
+This means you can use as many assertions as you want during your development process, without impacting performance in production.
+
+let age = -3
+assert(age >= 0, "A person's age can't be less than zero.")
+
+precondition(index > 0, "Index must be greater than zero.")
+
+
+
 
