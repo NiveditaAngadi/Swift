@@ -219,6 +219,161 @@ assert(age >= 0, "A person's age can't be less than zero.")
 
 precondition(index > 0, "Index must be greater than zero.")
 
+Tuple Comparision
+You can compare two tuples if they have the same type and the same number of values. 
+Tuples are compared from left to right, one value at a time, until the comparison finds two values that aren’t equal. 
+Those two values are compared, and the result of that comparison determines the overall result of the tuple comparison. 
+If all the elements are equal, then the tuples themselves are equal. 
 
+Nil-Coalescing Operator (??): 
+a??b -> It means 
+The nil-coalescing operator (a ?? b) unwraps an optional a if it contains a value, or returns a default value b if a is nil. 
+Short-hand for below code. 
+a != nil ? a! : b
+The nil-coalescing operator provides a more elegant way to encapsulate this conditional checking and unwrapping in a concise and readable form.
+If the value of a is non-nil, the value of b isn’t evaluated. This is known as short-circuit evaluation.
+
+Range Operators:
+Shortcuts to expressing range of values. 
+Closed Range: (...)
+The closed range operator (a...b) defines a range that runs from a to b, and includes the values a and b. 
+The value of a must not be greater than b.
+for index in 1...5 {
+    print("\(index) times 5 is \(index * 5)")
+}
+Half-Open Range Operator: (..<)
+The half-open range operator (a..<b) defines a range that runs from a to b, but doesn’t include b. 
+It’s said to be half-open because it contains its first value, but not its final value. 
+As with the closed range operator, the value of a must not be greater than b.
+If the value of a is equal to b, then the resulting range will be empty.
+
+Half-open ranges are particularly useful when you work with zero-based lists such as arrays, 
+where it’s useful to count up to (but not including) the length of the list
+let names = ["Anna", "Alex", "Brian", "Jack"]
+let count = names.count
+for i in 0..<count {
+    print("Person \(i + 1) is called \(names[i])")
+}
+One-Sided Ranges:
+The closed range operator has an alternative form for ranges that continue as far as possible in one direction.
+In these cases, you can omit the value from one side of the range operator. 
+This kind of range is called a one-sided range because the operator has a value on only one side.
+
+for name in names[2...] {
+    print(name)
+}
+// Brian
+// Jack
+
+String:
+A string is a series of characters, such as "hello, world" or "albatross". 
+Swift strings are represented by the String type. 
+The contents of a String can be accessed in various ways, including as a collection of Character values.
+
+Swift’s String and Character types provide a fast, Unicode-compliant way to work with text in your code. 
+String concatenation is as simple as combining two strings with the + operator, 
+and string mutability is managed by choosing between a constant or a variable, just like any other value in Swift. 
+You can also use strings to insert constants, variables, literals, and expressions into longer strings, 
+in a process known as "string interpolation".
+
+Despite this simplicity of syntax, Swift’s String type is a fast, modern string implementation. 
+Every string is composed of encoding-independent Unicode characters, 
+and provides support for accessing those characters in various Unicode representations.
+
+Strings are value types in swift. 
+ If you create a new String value, that String value is copied when it’s passed to a function or method, 
+or when it’s assigned to a constant or variable.
+
+Swift’s copy-by-default String behavior ensures that when a function or method passes you a String value, it’s clear that you own that exact String value, regardless of where it came from. 
+You can be confident that the string you are passed won’t be modified unless you modify it yourself.
+Behind the scenes, Swift’s compiler optimizes string usage so that actual copying takes place only when absolutely necessary. 
+This means you always get great performance when working with strings as value types.
+
+You can access the individual Character values for a String by iterating over the string with a for-in loop
+for character in "Dog!🐶" {
+    print(character)
+}
+
+let exclamationMark: Character = "!"
+
+Concatenating Strings and Characters: By +, append. 
+
+String Interpolation:
+String interpolation is a way to construct a new String value from a mix of constants, variables, literals,
+and expressions by including their values inside a string literal.
+let multiplier = 3
+let message = "\(multiplier) times 2.5 is \(Double(multiplier) * 2.5)"
+
+Unicode:
+Unicode is an international standard for encoding, representing, and processing text in different writing systems. 
+It enables you to represent almost any character from any lBehind the scenes, Swift’s native String type is built from Unicode scalar values. 
+A Unicode scalar value is a unique 21-bit number for a character or modifieranguage in a standardized form, and to read and write those characters to and from an external source such as a text file or web page. 
+Swift’s String and Character types are fully Unicode-compliant.
+
+Every instance of Swift’s Character type represents a single extended grapheme cluster. 
+An extended grapheme cluster is a sequence of one or more Unicode scalars that (when combined) produce a single human-readable character.
+
+String Indices:
+Each String value has an associated index type, String.Index, which corresponds to the position of each Character in the string.
+As mentioned above, different characters can require different amounts of memory to store, 
+so in order to determine which Character is at a particular position, you must iterate over each Unicode scalar from the start or end of that String. 
+For this reason, Swift strings can’t be indexed by integer values.
+Use the startIndex property to access the position of the first Character of a String. 
+The endIndex property is the position after the last character in a String.
+If a String is empty, startIndex and endIndex are equal.
+You access the indices before and after a given index using the index(before:) and index(after:) methods of String. 
+To access an index farther away from the given index, you can use the index(_:offsetBy:) method instead of calling one of these methods multiple times.
+
+let greeting = "Guten Tag!"
+greeting[greeting.startIndex]
+// G
+greeting[greeting.index(before: greeting.endIndex)]
+// !
+greeting[greeting.index(after: greeting.startIndex)]
+// u
+let index = greeting.index(greeting.startIndex, offsetBy: 7)
+greeting[index]
+// a
+
+Use the indices property to access all of the indices of individual characters in a string.
+for index in greeting.indices {
+    print("\(greeting[index]) ", terminator: "")
+}
+
+Insert and Remove 
+To insert a single character into a string at a specified index, use the insert(_:at:) method, 
+and to insert the contents of another string at a specified index, use the insert(contentsOf:at:) method.
+
+var welcome = "hello"
+welcome.insert("!", at: welcome.endIndex)
+// welcome now equals "hello!"
+welcome.insert(contentsOf: " there", at: welcome.index(before: welcome.endIndex))
+// welcome now equals "hello there!"
+
+To remove a single character from a string at a specified index, use the remove(at:) method, 
+and to remove a substring at a specified range, use the removeSubrange(_:) method:
+welcome.remove(at: welcome.index(before: welcome.endIndex))
+// welcome now equals "hello there"
+
+let range = welcome.index(welcome.endIndex, offsetBy: -6)..<welcome.endIndex
+welcome.removeSubrange(range)
+// welcome now equals "hello"
+
+SubString
+Like strings, 
+each substring has a region of memory where the characters that make up the substring are stored.
+The difference between strings and substrings is that, as a performance optimization, 
+a substring can reuse part of the memory that’s used to store the original string, or part of the memory that’s used to store another substring. 
+(Strings have a similar optimization, but if two strings share memory, they’re equal.) 
+This performance optimization means you don’t have to pay the performance cost of copying memory until you modify either the string or substring. 
+As mentioned above, substrings aren’t suitable for long-term storage — because they reuse the storage of the original string, the entire original string must be kept in memory as long as any of its substrings are being used.
+
+String and character equality is checked with the “equal to” operator (==) and the “not equal to” operator (!=)
+Two String values (or two Character values) are considered equal if their extended grapheme clusters are canonically equivalent. 
+Extended grapheme clusters are canonically equivalent if they have the same linguistic meaning and appearance, 
+even if they’re composed from different Unicode scalars behind the scenes.
+
+To check whether a string has a particular string prefix or suffix, call the string’s hasPrefix(_:) and hasSuffix(_:) methods, 
+both of which take a single argument of type String and return a Boolean value.
 
 
