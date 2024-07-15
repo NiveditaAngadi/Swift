@@ -15,7 +15,7 @@ This means that you can change (or mutate) the collection after it’s created b
 If you assign an array, a set, or a dictionary to a constant, that collection is immutable, and its size and contents can’t be changed.
 
 
-Array:
+# Array
 An array stores values of the same type in an ordered list.
 The same value can appear in an array multiple times at different positions.
 
@@ -38,13 +38,43 @@ Array with Array literal
 [<#value 1#>, <#value 2#>, <#value 3#>]
 var shoppingList: [String] = ["Eggs", "Milk"]
 
-Accessing and modifying an Array
+## Accessing and modifying an Array
+You access and modify an array through its methods and properties, or by using subscript syntax.
+Use the Boolean "isEmpty" property as a shortcut for checking whether the count property is equal to 0.
+You can add a new item to the end of an array by calling the array’s "append(_:)" method
+Alternatively, append an array of one or more compatible items with the addition "assignment operator (+=)".
+Retrieve a value from the array by using subscript syntax, passing the index of the value you want to retrieve within square brackets immediately after the name of the array.
+To insert an item into the array at a specified index, call the array’s "insert(_:at:)" method.
+you remove an item from the array with the "remove(at:)" method.
+If you try to access or modify a value for an index that’s outside of an array’s existing bounds, 
+you will trigger a runtime error. 
+If you want to remove the final item from an array, use the removeLast() method
+
+## Interating over an array 
+1. for-in loop
+for item in shoppingList {
+    print(item)
+}
+
+2. If you need the integer index of each item as well as its value, use the enumerated() method to iterate over the array instead.
+for (index, value) in shoppingList.enumerated() {
+    print("Item \(index + 1): \(value)")
+}
 
 
+# Set 
+A set stores distinct values of the same type in a collection with no defined ordering.
+You can use a set instead of an array when the order of items isn’t important, or when you need to ensure that an item only appears once.
+A type must be hashable inorder to save in the set,  that is, the type must provide a way to compute a hash value for itself. 
+All of Swift’s basic types (such as String, Int, Double, and Bool) are hashable by default, and can be used as set value types or dictionary key types. 
+Enumeration case values without associated values (as described in Enumerations) are also hashable by default.
 
+var letters = Set<Character>()
+letters.insert("a")
+letters = []
 
-
-
+You can also initialize a set with an array literal, as a shorthand way to write one or more values as a set collection.
+var favoriteGenres: Set<String> = ["Rock", "Classical", "Hip hop"]
 
 
 
