@@ -350,7 +350,60 @@ Tasks and actors let you divide a program into pieces that can safely run concur
 the part of a program that contains mutable state, like variables and properties, is called a concurrency domain.
 
 37. What is Sendable Type? Why we need this?
+Some kinds of data can't be shared between concurrency domains, because that data contains mutable state,
+but it doesn't protect against overlapping access. 
+A type that can be shared from one concurrency domain to another is known as a sendable type.
+For example, it can be passed as an argument when calling an actor method or be returned as the result of a task.
 
-38. How do you prevent the type from being sendable?
+38. Why sharing some types aren't safe among concurrency domains?
+For example, a class that contains mutable properties and doesn’t serialize access to those properties can 
+produce unpredictable and incorrect results when you pass instances of that class between different tasks.
+
+39. How do you mention the type is Sendabale?
+You mark a type as being sendable by declaring conformance to the Sendable protocol. 
+
+39. What is Sendable Protocol?
+A thread-safe type whose values can be shared across arbitrary concurrent contexts without introducing a risk of data races.
+
+40. Which type can be marked as sendable?
+- Value type and its mutable state is made up of other sendable data. For example, a structure with stored properties, an enumeration with associated values
+- The type doesn’t have any mutable state, and its immutable state is made up of other sendable data — for example, 
+a structure or class that has only read-only properties.
+- The type has code that ensures the safety of its mutable state, 
+like a class that’s marked @MainActor or a class that serializes access to its properties on a particular thread or queue.
+
+41. What are the semantic requirements that are enforced at compile time.
+- Conformance to Sendable must be declared in the same file as the type's declaration. 
+- To declare conformance to Sendable without any compiler enforcement, write @unchecked Sendable. 
+
+42. Explain @unchedked Sendable 
+To declare conformance to Sendable without any compiler enforcement, write @unchecked Sendable.
+You are responsible for the correctness of unchecked sendable types, 
+for example, by protecting all access to its state with a lock or a queue. 
+Unchecked conformance to Sendable also disables enforcement of the rule that conformance must be in the same file.
+
+43. Which type are always sendable?
+Some types are always sendable, like structures that have only sendable properties and enumerations that have only sendable associated values.
+
+TemperatureReading is a structure that has only sendable properties, and the structure isn’t marked public or @usableFromInline, 
+it’s implicitly sendable. 
+struct TemperatureReading {
+    var measurement: Int
+}
+
+44. How do you prevent the type from being sendable?
+To explicitly mark a type as not being sendable, overriding an implicit conformance to the Sendable protocol
+struct FileDescriptor {
+    let rawValue: CInt
+}
+
+@available(*, unavailable)
+extension FileDescriptor: Sendable { }
+
+The code above shows part of a wrapper around POSIX file descriptors. Even though interface for file descriptors uses integers to identify and interact with open files, and integer values are sendable, 
+a file descriptor isn’t safe to send across concurrency domains.
+
+In the code above, the FileDescriptor is a structure that meets the criteria to be implicitly sendable. However, 
+the extension makes its conformance to Sendable unavailable, preventing the type from being sendable.
 
 
