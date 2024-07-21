@@ -1,0 +1,63 @@
+AccessControl
+- Manage the visibility of code by declaration, file, and module.
+
+1. What is Access Control?
+Access control restricts access to parts of your code from code in other source files and modules.
+
+2. Why Access Control?
+This feature enables you to hide the implementation details of your code, and to specify a preferred interface through which that code can be accessed and used.
+
+3. Where can specify the access control?
+You can assign specific access levels to individual types (classes, structures, and enumerations), as well as to properties, methods, initializers, and subscripts belonging to those types. 
+Protocols can be restricted to a certain context, as can global constants, variables, and functions.
+
+4. Where explicit access control mention is not necessary?
+If you are writing a single-target app, you may not need to specify explicit access control levels at all.
+
+5. What is module?
+A module is a single unit of code distribution — a framework or application that’s built and shipped as a single unit and that can be 
+imported by another module with Swift’s import keyword.
+Each build target (such as an app bundle or framework) in Xcode is treated as a separate module in Swift
+
+6. What is source file?
+A source file is a single Swift source code file within a module (in effect, a single file within an app or framework). 
+
+7. What is Packages?
+A package is a group of modules that you develop as a unit. 
+
+8. How many access levels in swift?
+There are 6 different access levels in swift. 
+These access levels are relative to the source file in which an entity is defined, the module that source file belongs to, and the package that the module belongs to.
+
+1. Open  
+2. Public  
+3. Package 
+4. Internal 
+5. File-Private 
+6. Private 
+
+1. Open -> Highest (least restrictive) access level. 
+Enable entities to be used 
+1. within any source file from their defining module, 
+2. and also in a source file from another module that imports the defining module.
+You typically use open when specifying the public interface to a framework.
+- Open access applies only to classes and class members.
+- Allows code outside the module to subclass and override.
+
+2. Public:
+
+3. Package: Enables entities to be used within any source files from their defining package but not in any source file outside of that package.
+You typically use package access within an app or framework that’s structured into multiple modules.
+
+4. Internal: Enables entities to be used within any source file from their defining module, but not in any source file outside of that module. 
+You typically use internal access when defining an app’s or a framework’s internal structure.
+
+5. File-private: Access restricts the use of an entity to its own defining source file.
+Private access within the file itself. 
+fileprivate declared variable is accessible within the same file. 
+
+6. Private: 
+Use restricts the use of an entity to the enclosing declaration, and to extensions of that declaration that are in the same file
+Private access is the lowest (most restrictive) access level.
+
+
