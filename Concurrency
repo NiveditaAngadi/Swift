@@ -296,6 +296,7 @@ Actors let you safely share information between concurrent code.
 Actors are reference type.
 Unlike classes, actors allow only one task to access their mutable state at a time, which makes it safe for code in multiple tasks to interact with the same 
 instance of an actor. 
+Writing properties from outside an actor is not allowed, with or without await.
 
 actor TemperatureLogger {
     let label: String
@@ -345,44 +346,49 @@ The following aspects of the Swift concurrency model work together to make it ea
 Because of these guarantees, code that doesn’t include await and that’s inside an actor can make the updates without a risk of other places in your program 
 observing the temporarily invalid state.
 
-36. What is concurrency domain?
+37. Why Actors required?
+ If you ever need to make sure that access to some object is restricted to a single task at a time, actors are perfect.
+ UI work should be restricted to the main thread, but you probably also want to restrict database access so that you can’t write conflicting data, for example. There are also times when simultaneous concurrent access to data can cause data races – when the outcome of your work depends on the order in which tasks complete. 
+These errors are particularly nasty to find and fix, but with actors such data races become impossible.
+
+38. What is concurrency domain?
 Tasks and actors let you divide a program into pieces that can safely run concurrently. Inside of a task or an instance of an actor,
 the part of a program that contains mutable state, like variables and properties, is called a concurrency domain.
 
-37. What is Sendable Type? Why we need this?
+39. What is Sendable Type? Why we need this?
 Some kinds of data can't be shared between concurrency domains, because that data contains mutable state,
 but it doesn't protect against overlapping access. 
 A type that can be shared from one concurrency domain to another is known as a sendable type.
 For example, it can be passed as an argument when calling an actor method or be returned as the result of a task.
 
-38. Why sharing some types aren't safe among concurrency domains?
+40. Why sharing some types aren't safe among concurrency domains?
 For example, a class that contains mutable properties and doesn’t serialize access to those properties can 
 produce unpredictable and incorrect results when you pass instances of that class between different tasks.
 
-39. How do you mention the type is Sendabale?
+41. How do you mention the type is Sendabale?
 You mark a type as being sendable by declaring conformance to the Sendable protocol. 
 
-39. What is Sendable Protocol?
+42. What is Sendable Protocol?
 A thread-safe type whose values can be shared across arbitrary concurrent contexts without introducing a risk of data races.
 
-40. Which type can be marked as sendable?
+43. Which type can be marked as sendable?
 - Value type and its mutable state is made up of other sendable data. For example, a structure with stored properties, an enumeration with associated values
 - The type doesn’t have any mutable state, and its immutable state is made up of other sendable data — for example, 
 a structure or class that has only read-only properties.
 - The type has code that ensures the safety of its mutable state, 
 like a class that’s marked @MainActor or a class that serializes access to its properties on a particular thread or queue.
 
-41. What are the semantic requirements that are enforced at compile time.
+44. What are the semantic requirements that are enforced at compile time.
 - Conformance to Sendable must be declared in the same file as the type's declaration. 
 - To declare conformance to Sendable without any compiler enforcement, write @unchecked Sendable. 
 
-42. Explain @unchedked Sendable 
+45. Explain @unchedked Sendable 
 To declare conformance to Sendable without any compiler enforcement, write @unchecked Sendable.
 You are responsible for the correctness of unchecked sendable types, 
 for example, by protecting all access to its state with a lock or a queue. 
 Unchecked conformance to Sendable also disables enforcement of the rule that conformance must be in the same file.
 
-43. Which type are always sendable?
+46. Which type are always sendable?
 Some types are always sendable, like structures that have only sendable properties and enumerations that have only sendable associated values.
 
 TemperatureReading is a structure that has only sendable properties, and the structure isn’t marked public or @usableFromInline, 
@@ -391,7 +397,7 @@ struct TemperatureReading {
     var measurement: Int
 }
 
-44. How do you prevent the type from being sendable?
+47. How do you prevent the type from being sendable?
 To explicitly mark a type as not being sendable, overriding an implicit conformance to the Sendable protocol
 struct FileDescriptor {
     let rawValue: CInt
