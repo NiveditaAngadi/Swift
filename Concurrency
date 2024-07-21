@@ -291,6 +291,7 @@ Tasks - used to break up the program into isolated, concurrent pieces.
 Tasks are isolated from each other, which is what makes it safe for them to run at the same time. 
 But, sometimes need to share some information between tasks. 
 Actors let you safely share information between concurrent code.
+Actors behaves like serial queue. 
 
 34. Explain Actors
 Actors are reference type.
@@ -411,5 +412,112 @@ a file descriptor isn’t safe to send across concurrency domains.
 
 In the code above, the FileDescriptor is a structure that meets the criteria to be implicitly sendable. However, 
 the extension makes its conformance to Sendable unavailable, preventing the type from being sendable.
+
+48. What is @MainActor?
+@MainActor is a global actor that uses the main queue for executing its work. 
+ 
+49. Why @MainActor in swiftUI?
+even though SwiftUI ensures main-actor-ness when using @ObservableObject, @StateObject, and SwiftUI view body properties, 
+it’s a good idea to add the @MainActor attribute to all your observable object classes to be absolutely sure all UI updates happen on the main actor. 
+If you need certain methods or computed properties to opt out of running on the main actor, use nonisolated as you would do with a regular actor.
+
+50. What are the benefits of @MainActor?
+Previously we needed to do it by hand, remembering to use code like DispatchQueue.main.async() 
+or similar every place it was needed, but now the compiler does it for us automatically.
+
+51. How do you run some code on Main actor spontaneously?
+If you do need to spontaneously run some code on the main actor, you can do that by calling MainActor.run() and providing your work.
+func couldBeAnywhere() async {
+    await MainActor.run {
+        print("This is on the main actor.")
+    }
+}
+
+await couldBeAnywhere()
+
+Send values from the run.
+
+func couldBeAnywhere() async {
+    let result = await MainActor.run { () -> Int in
+        print("This is on the main actor.")
+        return 42
+    }
+
+    print(result)
+}
+
+await couldBeAnywhere()
+
+If you wanted the work to be sent off to the main actor without waiting for its result to come back, you can place it in a new task like this
+
+func couldBeAnywhere() {
+    Task {
+        await MainActor.run {
+            print("This is on the main actor.")
+        }
+    }
+
+    // more work you want to do
+}
+
+couldBeAnywhere()
+
+or, you can also mark your task’s closure as being @MainActor, like this:
+func couldBeAnywhere() {
+    Task { @MainActor in
+        print("This is on the main actor.")
+    }
+
+    // more work you want to do
+}
+
+couldBeAnywhere()
+
+52. When to use actors in the programming? Explain with Scenario.
+
+Scenario 1: Networking and API Handling
+Situation: Managing API requests to fetch user data.
+
+Choice: Actor
+
+Reason: Actors provide thread-safe operations and ensure data consistency during concurrent network requests, preventing race conditions. They serialize access to their properties and methods, making them ideal for concurrent environments. Although actors are also allocated on the heap, the benefits of built-in thread safety and simplified concurrency management make them preferable for this use case.
+
+Why Not Classes or Structs?
+
+Class: While classes can handle shared state, they require additional code for thread safety, increasing complexity.
+Struct: Structs are not suitable for managing mutable shared state, especially in a concurrent environment.
+
+actor UserDataFetcher {
+    private var userData: [String: Any] = [:]
+    
+    func fetchUserData() async {
+        // Perform network request and update userData
+    }
+}
+
+Scenario 2: Game State Management
+Situation: Managing a game character's state, such as health and inventory.
+
+Choice: Actor
+
+Reason: Actors ensure thread-safe state management, crucial for games where multiple operations might modify the character's state concurrently. This prevents race conditions and ensures consistent state updates. Despite being heap-allocated, actors' ability to handle concurrency efficiently is vital for this scenario.
+
+Why Not Classes or Structs?
+
+Class: Managing thread safety with classes requires explicit synchronization, which can be error-prone.
+Struct: Structs, being value types, are unsuitable for managing mutable shared state across different parts of a game.
+
+actor GameCharacter {
+    private var health: Int = 100
+    private var inventory: [String] = []
+    
+    func takeDamage(_ amount: Int) {
+        health -= amount
+    }
+    
+    func addItem(_ item: String) {
+        inventory.append(item)
+    }
+}
 
 
