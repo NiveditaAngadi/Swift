@@ -1,0 +1,9 @@
+Automatic Reference Counting (ARC)
+Model the lifetime of objects and their relationships.
+
+1. What is ARC?
+Swift uses Automatic Reference Counting (ARC) to track and manage your app’s memory usage. 
+
+Reference counting applies only to the classes. 
+Structures and enumerations are value types, not reference types, and aren’t stored and passed by reference.
+
