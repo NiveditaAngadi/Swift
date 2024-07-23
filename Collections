@@ -76,5 +76,147 @@ letters = []
 You can also initialize a set with an array literal, as a shorthand way to write one or more values as a set collection.
 var favoriteGenres: Set<String> = ["Rock", "Classical", "Hip hop"]
 
+1. How do you find out number of items in a set?
+By the read only property of Set that is - "Count"
+
+var favoriteGenres: Set = ["Rock", "Classical", "Hip hop"]
+print("I have \(favoriteGenres.count) favorite music genres.")
+
+2. How do you check whether count is 0? 
+By "isEmpty" property 
+
+favorites.isEmpty 
+
+3. How can you insert new element to set ?
+By "insert(_:)" method 
+favorites.insert("Jazz")
+
+4. How can you remove element from a set?
+By "remove(_:) method"
+If set able to find a method to remove it removes and returns the removed value, if not returns nil"
+
+5. How do you remove all items in the set ?
+By "removeAll()" method. 
+
+6. How do you check Set contains particular item?
+By "contains(_:) method 
+
+if favoriteGenres.contains("Funk") {
+    print("I get up on the good foot.")
+} else {
+    print("It's too funky in here.")
+}
+
+7. How can you iterate over Set?
+By for-in loop.
+for genre in favoriteGenres {
+    print("\(genre)")
+}
+
+8. How do you iterate over set in the order?
+Use sorted function on set and iterate over the same. 
+for genre in favoriteGenres.sorted() {
+    print("\(genre)")
+}
+
+For more set operations verify, 
+https://docs.swift.org/swift-book/documentation/the-swift-programming-language/collectiontypes
+
+Dictionaries
+Unordered Collection 
+1. What is Dictionary?
+A dictionary stores associations between keys of the same type and values of the same type in a collection with no defined ordering.
+Each value is associated with a unique key, which acts as an identifier for that value within the dictionary. 
+You use a dictionary when you need to look up values based on their identifier.
+
+Dictionary<Key, Value>
+Key - type of value that can be used as a dictionary key. 
+Value - type of value that dictionary stores for those keys.
+
+You can also write dictionary as, [Key:Value] 
+
+2. How do you create an empty dictionary?
+var namesOfIntegers: [Int: String] = [:]
+
+3. What is Dictionary literal?
+[<#key 1#>: <#value 1#>, <#key 2#>: <#value 2#>, <#key 3#>: <#value 3#>]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
+
+4. How do you find out the total number of items in Dictionary?
+by readly only count property. 
+print("The airports dictionary contains \(airports.count) items.")
+
+5. How do you identify whether dictionary has elements?
+by "isEmpty" property. 
+
+if airports.isEmpty {
+    print("The airports dictionary is empty.")
+} else {
+    print("The airports dictionary isn't empty.")
+}
+
+6. How can you add/update item to a dictionary?
+By subscript syntax.
+airports["LHR"] = "London"
+
+You can also use subscript syntax to change the value associated with a particular key:
+airports["LHR"] = "London Heathrow"
+
+use a dictionary’s updateValue(_:forKey:) method to set or update the value for a particular key.
+the updateValue(_:forKey:) method returns the old value after performing an update.
+
+7. How do you retrieve value for Key from dictionary?
+You can also use subscript syntax to retrieve a value from the dictionary for a particular key. 
+
+You can use subscript syntax to remove a key-value pair from a dictionary by assigning a value of nil for that key
+if let airportName = airports["DUB"] {
+    print("The name of the airport is \(airportName).")
+} else {
+    print("That airport isn't in the airports dictionary.")
+}
+
+airports["APL"] = "Apple International"
+// "Apple International" isn't the real airport for APL, so delete it
+airports["APL"] = nil
+
+8. How can you remove item from dictionary?
+From removeValue(forKey:) method.
+if let removedValue = airports.removeValue(forKey: "DUB") {
+    print("The removed airport's name is \(removedValue).")
+} else {
+    print("The airports dictionary doesn't contain a value for DUB.")
+}
+
+9. How can you iterate over dictionary?
+For-in loop.
+Each item in the dictionary is returned as a (key, value) tuple.
+
+for (airportCode, airportName) in airports {
+    print("\(airportCode): \(airportName)")
+}
+
+10. How can you iterate only keys or values of dictionary?
+You can also retrieve an iterable collection of a dictionary’s keys or values by accessing its keys and values properties.
+
+for airportCode in airports.keys {
+    print("Airport code: \(airportCode)")
+}
+
+for airportName in airports.values {
+    print("Airport name: \(airportName)")
+}
+
+11. How do you retrieve all keys or values in an array?
+If you need to use a dictionary’s keys or values with an API that takes an Array instance, initialize a new array with the keys or
+values property.
+
+let airportCodes = [String](airports.keys)
+// airportCodes is ["LHR", "YYZ"]
 
 
+let airportNames = [String](airports.values)
+// airportNames is ["London Heathrow", "Toronto Pearson"]
+
+12. How do you iterate dictionary values/keys in particular order?
+Swift’s Dictionary type doesn’t have a defined ordering. To iterate over the keys or values of a dictionary in a specific order, use the sorted() method on its keys or values property.
