@@ -1,0 +1,209 @@
+Define and call functions, label their arguments, and use their return values.
+
+1. What is function?
+Functions are self-contained chunks of code that perform a specific task. 
+
+2. What is the idenitifacation for the function?
+Name of the function is an idenifier, when you called by that name, particluar functionality will be executed.
+Every function in Swift has a type, consisting of the function’s parameter types and return type. You can use this type like any other type in Swift, which makes it easy to pass functions as parameters to other functions, 
+and to return functions from functions.
+Functions can also be written within other functions to encapsulate useful functionality within a nested function scope.
+Every function has a function name, which describes the task that the function performs.
+
+3. What is parameter?
+When you define a function, you can optionally define one or more named, typed values that the function takes as input, known as parameters.
+
+4. What is return type?
+You can also optionally define a type of value that the function will pass back as output when it’s done, known as its return type.
+
+5. What is arguments?
+Input values that passed to the function while calling it. 
+
+To use a function, you “call” that function with its name and pass it input values (known as arguments) that match the types of the function’s parameters.
+A function’s arguments must always be provided in the same order as the function’s parameter list.
+
+func greet(person: String) -> String {
+    let greeting = "Hello, " + person + "!"
+    return greeting
+}
+
+6.  Expalin function with multiple return values.
+You can use a tuple type as the return type for a function to return multiple values as part of one compound return value.
+
+7. Explain Implicit return function.
+If the entire body of the function is a single expression, the function implicitly returns that expression.
+
+func greeting(for person: String) -> String {
+    "Hello, " + person + "!"
+}
+print(greeting(for: "Dave"))
+// Prints "Hello, Dave!"
+
+8. What is argument lable and parameter label
+Each function parameter has both an argument label and a parameter name. The argument label is used when calling the function; each argument is written in the function call with its argument label before it. The parameter name is used in the implementation of the function. 
+By default, parameters use their parameter name as their argument label.
+
+9. How you specify argument label?
+func someFunction(argumentLabel parameterName: Int) {
+    // In the function body, parameterName refers to the argument value
+    // for that parameter.
+}
+
+func greet(person: String, from hometown: String) -> String {
+    return "Hello \(person)!  Glad you could visit from \(hometown)."
+}
+print(greet(person: "Bill", from: "Cupertino"))
+// Prints "Hello Bill!  Glad you could visit from Cupertino."
+
+10. How you omit the argument label?
+If you don’t want an argument label for a parameter, write an underscore (_) instead of an explicit argument label for that parameter.
+func someFunction(_ firstParameterName: Int, secondParameterName: Int) {
+    // In the function body, firstParameterName and secondParameterName
+    // refer to the argument values for the first and second parameters.
+}
+someFunction(1, secondParameterName: 2)
+
+11. How do you provide the default parameter value?
+You can define a default value for any parameter in a function by assigning a value to the parameter after that parameter’s type. 
+If a default value is defined, you can omit that parameter when calling the function.
+
+func someFunction(parameterWithoutDefault: Int, parameterWithDefault: Int = 12) {
+    // If you omit the second argument when calling this function, then
+    // the value of parameterWithDefault is 12 inside the function body.
+}
+someFunction(parameterWithoutDefault: 3, parameterWithDefault: 6) // parameterWithDefault is 6
+someFunction(parameterWithoutDefault: 4) // parameterWithDefault is 12
+
+12. What is variadic parameters?
+A variadic parameter accepts zero or more values of a specified type. 
+
+13. Where do you use variadic paramters?
+You use a variadic parameter to specify that the parameter can be passed a varying number of input values when the function is called.
+
+14. How do you specify the variadic parameter?
+Write variadic parameters by inserting three period characters (...) after the parameter’s type name.
+
+15. Explain the variadic parameter in the function's body. 
+The values passed to a variadic parameter are made available within the function’s body as an array of the appropriate type. For example, 
+a variadic parameter with a name of numbers and a type of Double... is made available within the function’s body as a constant array called numbers of type [Double].
+
+16. Are function parameters constant by default?
+Yes. Function paramters are constant by default. 
+
+17. What is in-out parameters?
+By default function parameters are constant, trying to modify resulted in the compile time error. 
+If you want to modify the parameter and wants that changes persists after the function call, mention those paramter as in-out. 
+
+18. How do you write in-out parameter?
+You write an in-out parameter by placing "inout" keyword right before parameter's type. 
+An in-out paramter has a value that's passed "in" to the function, and modified and passed "out" from the function to replace the original value. 
+
+19. Can I pass constant or literals as inout paramter?
+No, you have to pass the variable as the argument for an in-out paramters. 
+
+20. How do you indicate that paramters can be modified by the function?
+You place "&" directly before a variable's name when you pass it as an argument to an in-out parameter, to indicate that it can be modified by the function. 
+
+21. Can In-out parameter have default value?
+No, In-out paramter shouldn't have default value. 
+
+22. Can In-out parameter have variadic parameter?
+Variadic parameters can’t be marked as inout
+
+23. Explain in detail what happens internally when you define parameter as in-out?
+In out paramters are passed as follows, 
+1. When the function is called, the value of the argument is copied. 
+2. In the body of the function, the copy is modified. 
+3. When the function returns, the copy's value is assigned to the original argument. 
+This behavior is known as copy-in copy-out or call by value result. 
+
+ For example, when a computed property or a property with observers is passed as an in-out parameter, 
+its getter is called as part of the function call and its setter is called as part of the function return.
+
+As an optimization, when the argument is a value stored at a physical address in memory, 
+the same memory location is used both inside and outside the function body. The optimized behavior is known as call by reference.
+ it satisfies all of the requirements of the copy-in copy-out model while removing the overhead of copying.
+
+
+24. Why shouldn't access a value that was passed as an in-out argument?
+Within a function, don’t access a value that was passed as an in-out argument, 
+even if the original value is available in the current scope. Accessing the original is a simultaneous access of the value, which violates memory exclusivity.
+
+var someValue: Int
+func someFunction(a: inout Int) {
+    a += someValue
+}
+
+
+// Error: This causes a runtime exclusivity violation
+someFunction(&someValue)
+
+For the same reason, you can’t pass the same value to multiple in-out parameters.
+
+var someValue: Int
+func someFunction(a: inout Int, b: inout Int) {
+    a += b
+    b += 1
+}
+
+
+// Error: Cannot pass the same value to multiple in-out parameters
+someFunction(&someValue, &someValue)
+
+25. What is function type?
+Every function has a specific function type, made up of the parameter types and the return type of the function.
+
+For example:
+func addTwoInts(_ a: Int, _ b: Int) -> Int {
+    return a + b
+}
+func multiplyTwoInts(_ a: Int, _ b: Int) -> Int {
+    return a * b
+}
+
+var mathFunction: (Int, Int) -> Int = addTwoInts
+
+“Define a variable called mathFunction, which has a type of ‘a function that takes two Int values, and returns an Int value.’ Set this new variable to refer to the function called addTwoInts.”
+
+print("Result: \(mathFunction(2, 3))")
+// Prints "Result: 5"
+
+
+26. How do you pass the function type as paramter in function?
+You can use a function type such as (Int, Int) -> Int as a parameter type for another function. 
+This enables you to leave some aspects of a function’s implementation for the function’s caller to provide when the function is called.
+
+func printMathResult(_ mathFunction: (Int, Int) -> Int,  _ a: Int, _ b: Int) {
+  print("Result: \(mathFunction(a, b))")
+}
+printMathResult(addTwoInts, 3, 5)
+// Prints "Result: 8"
+
+27. How do you pass the function type as return types?
+You can use function type as return type in another function. 
+You do this by writing a complete function type immediately after the return arrow (->) of the returning function.
+
+func stepForward(_ input: Int) -> Int {
+    return input + 1
+}
+func stepBackward(_ input: Int) -> Int {
+    return input - 1
+}
+
+func chooseStepFunction(backward: Bool) -> (Int) -> Int {
+    return backward ? stepBackward : stepForward
+}
+
+var currentValue = 3
+let moveNearerToZero = chooseStepFunction(backward: currentValue > 0)
+// moveNearerToZero now refers to the stepBackward() function
+
+28. What is global function?
+Functions are defined at global scope. 
+
+29. What is nested function?
+Define functions inside the bodies of other functions.
+Nested functions are hidden from the outside world by default, but can still be called and used by their enclosing function. 
+An enclosing function can also return one of its nested functions to allow the nested function to be used in another scope.
+
+
