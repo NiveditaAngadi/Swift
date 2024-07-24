@@ -149,5 +149,174 @@ default:
 print("There are \(naturalCount) \(countedThings).")
 // Prints "There are dozens of moons orbiting Saturn."
 
+10. How to use Where clause in switch?
+A switch case can use a where clause to check for additional conditions. 
+let yetAnotherPoint = (1, -1)
+switch yetAnotherPoint {
+case let (x, y) where x == y:
+    print("(\(x), \(y)) is on the line x == y")
+case let (x, y) where x == -y:
+    print("(\(x), \(y)) is on the line x == -y")
+case let (x, y):
+    print("(\(x), \(y)) is just some arbitrary point")
+}
+// Prints "(1, -1) is on the line x == -y"
+
+11. Waht is compound case in Swift?
+Multiple switch cases that share the same body can be combined by writing several patterns after case, with a comma between each of the patterns.
+
+let someCharacter: Character = "e"
+switch someCharacter {
+case "a", "e", "i", "o", "u":
+    print("\(someCharacter) is a vowel")
+case "b", "c", "d", "f", "g", "h", "j", "k", "l", "m",
+    "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z":
+    print("\(someCharacter) is a consonant")
+default:
+    print("\(someCharacter) isn't a vowel or a consonant")
+}
+// Prints "e is a vowel"
+
+Compound cases can also include value bindings. All of the patterns of a compound case have to include the same set of value bindings, 
+and each binding has to get a value of the same type from all of the patterns in the compound case.
+
+12. What are control transfer statements in Swift?
+ a. continue
+ b. break 
+ c. fallthrough 
+ d. return 
+ e. throw 
+
+13. What is contine statement? 
+The continue statement tells a loop to stop what it’s doing and start again at the beginning of the next iteration through the loop.
+It says “I am done with the current loop iteration” without leaving the loop altogether.
+
+let puzzleInput = "great minds think alike"
+var puzzleOutput = ""
+let charactersToRemove: [Character] = ["a", "e", "i", "o", "u", " "]
+for character in puzzleInput {
+    if charactersToRemove.contains(character) {
+        continue
+    }
+    puzzleOutput.append(character)
+}
+print(puzzleOutput)
+// Prints "grtmndsthnklk"
+
+14. What is break statement?
+The break statement ends execution of an entire control flow statement immediately. 
+The break statement can be used inside a switch or loop statement when you want to terminate the execution of the switch or loop statement earlier than would otherwise be the case.
+When used inside a loop statement, break ends the loop’s execution immediately and transfers control to the code after the loop’s closing brace (}).
+When used inside a switch statement, break causes the switch statement to end its execution immediately and to transfer control to the code after the switch statement’s closing brace (}).
+Always use a break statement to ignore a switch case.
+
+14. What is Fallthrough statement?
+In Swift, switch statements don’t fall through the bottom of each case and into the next one. That is, the entire switch statement completes its execution as soon as the first matching case is completed. 
+By contrast, C requires you to insert an explicit break statement at the end of every switch case to prevent fallthrough. 
+Avoiding default fallthrough means that Swift switch statements are much more concise and predictable than their counterparts in C, and thus they avoid executing multiple switch cases by mistake.
+If you need C-style fallthrough behavior, you can opt in to this behavior on a case-by-case basis with the fallthrough keyword.
+
+let integerToDescribe = 5
+var description = "The number \(integerToDescribe) is"
+switch integerToDescribe {
+case 2, 3, 5, 7, 11, 13, 17, 19:
+    description += " a prime number, and also"
+    fallthrough
+default:
+    description += " an integer."
+}
+print(description)
+// Prints "The number 5 is a prime number, and also an integer."
+
+15. How do you create complex control flow structures in Swift?
+In Swift, you can nest loops and conditional statements inside other loops and conditional statements to create complex control flow structures. 
+However, loops and conditional statements can both use the break statement to end their execution prematurely. 
+Therefore, it’s sometimes useful to be explicit about which loop or conditional statement you want a break statement to terminate. Similarly, if you have multiple nested loops, 
+it can be useful to be explicit about which loop the continue statement should affect.
+
+<#label name#>: while <#condition#> {
+   <#statements#>
+}
+
+16. Explain guard statement?
+Guard is like If statment. You use a guard statement to require that a condition must be true in order for the code after the guard statement to be executed. 
+Unlike an if statement, a guard statement always has an else clause — the code inside the else clause is executed if the condition isn’t true.
+If the guard statement’s condition is met, code execution continues after the guard statement’s closing brace.
+Any variables or constants that were assigned values using an optional binding as part of the condition are available for the rest of the code block that the guard statement appears in.
+If that condition isn’t met, the code inside the else branch is executed. That branch must transfer control to exit the code block in which the guard statement appears.
+It can do this with a control transfer statement such as return, break, continue, or throw, or it can call a function or method that doesn’t return, such as fatalError(_:file:line:).
+
+Using a guard statement for requirements improves the readability of your code, compared to doing the same check with an if statement. It lets you write the code that’s typically executed without wrapping it in an else block, 
+and it lets you keep the code that handles a violated requirement next to the requirement.
+
+17. Explain deferred actions.
+You use defer block to write code that will be executed later, when program reaches the end of the current scope.
+The code inside of the defer always runs, regardless of how the program exits that scope. 
+Benefits of defer:
+This behavior makes defer useful for operations where you need to guarantee a pair of actions happen — like manually allocating and freeing memory, opening and closing low-level file descriptors,
+and beginning and ending transactions in a database — because you can write both actions next to each other in your code. 
+
+var score = 1
+if score < 10 {
+    defer {
+        print(score)
+    }
+    score += 5
+}
+// Prints "6"
+
+If you write more than one defer block in the same scope, the first one you specify is the last one to run.
+if score < 10 {
+    defer {
+        print(score)
+    }
+    defer {
+        print("The score is:")
+    }
+    score += 5
+}
+// Prints "The score is:"
+// Prints "6"
+If your program stops running — for example, because of a runtime error or a crash — deferred code doesn’t execute. 
+However, deferred code does execute after an error is thrown.
+
+18. How to verify the availibility of the API in Swift?
+Swift has built-in support for checking API availability, which ensures that you don’t accidentally use APIs that are unavailable on a given deployment target.
+You can mention the list of platforms and versions (including the minor versions)
+
+if #available(<#platform name#> <#version#>, <#...#>, *) {
+    <#statements to execute if the APIs are available#>
+} else {
+    <#fallback statements to execute if the APIs are unavailable#>
+}
+
+
+if #available(iOS 10, macOS 10.12, *) {
+    // Use iOS 10 APIs on iOS, and use macOS 10.12 APIs on macOS
+} else {
+    // Fall back to earlier iOS and macOS APIs
+}
+
+Struct - color preference available from macOS 10.12 or later. 
+
+@available(macOS 10.12, *)
+struct ColorPreference {
+    var bestColor = "blue"
+}
+
+
+func chooseBestColor() -> String {
+    guard #available(macOS 10.12, *) else {
+       return "gray"
+    }
+    let colors = ColorPreference()
+    return colors.bestColor
+}
+
+You can use #unavailable also to verify the unavailable of API. 
+if #unavailable(iOS 10) {
+    // Fallback code
+}
+
 
 
