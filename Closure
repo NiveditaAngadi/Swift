@@ -80,7 +80,31 @@ func someFunctionWithEscapingClosure(completionHandler: @escaping () -> Void) {
 11. Why closure needs to be escaped?
 In order to call it later. 
 
-12. Why should use autoclosure
+12. What is @autoclosure?
+As per name - it creates closure automatically from an argument passed to a function. 
+Turning an argument into a closure allows us to delay the actual request of the argument.
+@autoclosure in Swift is a type of closure that allows to omit braces and make it look like a normal expression.
+
+func printTest1(_ result: () -> Void) {
+    print("Before")
+    result()
+    print("After")
+}
+
+printTest1({ print("Hello") })
+
+func printTest2(_ result: @autoclosure () -> Void) {
+    print("Before")
+    result()
+    print("After")
+}
+
+printTest2(print("Hello"))
+
+The @autoclosure attribute is used inside Swift wherever code needs to be passed in and executed only if conditions are right.
+
+
+12. Why should use autoclosure?
 In order to delay the execution of the function. 
 
 13. Parameters in closure can contain in-out parameters?
@@ -96,7 +120,19 @@ The parameters to functions and closures are always constants.
 Capturing self in an escaping closure makes it easy to accidently create a strong reference cycle. 
 
 17. Explain more about escaping closure can't capture mutable reference in an instances of a structure and an enumerations. 
-An escaping 
+An escaping closure can't capture mutable reference to self when self is an instance of a structure or an enumeration. Because, structures and enumerations
+don't allow shared mutability. 
+
+18. Can I use @autoclosure in escaping closure?
+Yes. 
+If you want an autoclosure that’s allowed to escape, use both the @autoclosure and @escaping attributes. 
+func collectCustomerProviders(_ customerProvider: @autoclosure @escaping () -> String) {
+    customerProviders.append(customerProvider)
+}
+
+18. How you call closure in mutating function of structure/enumerations?
+
+
 
 16. Write map function in closure 
 
