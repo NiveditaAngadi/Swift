@@ -92,6 +92,12 @@ Yes. But in-out parameters should n't have default values.
 15. Does the parameter passed to the closure in constant or variable?
 The parameters to functions and closures are always constants.
 
+16. Why escaping closure that refers to self needs special consideration if self refers to an instance of a class?
+Capturing self in an escaping closure makes it easy to accidently create a strong reference cycle. 
+
+17. Explain more about escaping closure can't capture mutable reference in an instances of a structure and an enumerations. 
+An escaping 
+
 16. Write map function in closure 
 
 17. Write sorted(by: ) in closure
