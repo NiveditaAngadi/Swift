@@ -61,6 +61,7 @@ from within its body, even if the original scope that defined constants and vari
 9. Closure is reference or value type?
 Closure is reference type. Functions and closures are reference types.
 Whenever you assign a function or a closure to a constant or a variable, you are actually setting that constant or variable to be a reference to the function or closure.
+If you assign a closure to two different constants or variables, both of those constants or variables refer to the same closure. 
 
 10. What is esacping closure?
 A closure is said to escape a function when closure is passed as an argument to the function, but is called after the function returns.
