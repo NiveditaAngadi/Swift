@@ -80,4 +80,24 @@ func someFunctionWithEscapingClosure(completionHandler: @escaping () -> Void) {
 11. Why should use autoclosure
 In order to delay the execution of the function. 
 
+12. Parameters in closure can contain in-out parameters?
+Yes. But in-out parameters should n't have default values. 
+
+13. What is "in" represent in closure?
+"in" indicates the start of the closure body, means the definition of the closure's paramters and return type has finished, and the body of the closure is about to begin. 
+
+14. Does the parameter passed to the closure in constant or variable?
+The parameters to functions and closures are always constants.
+
+14. Write map function in closure 
+
+15. Write sorted(by: ) in closure
+
+16. Write filter in closure 
+
+17. Write compactMap in closure 
+
+18. Write reduce in closure
+
+
 
