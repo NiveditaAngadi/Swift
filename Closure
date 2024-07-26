@@ -10,7 +10,7 @@ Closures can capture and store references to any constants and variables from th
 Swift handles all of the memory management of capturing for you. 
 
 3. Explain different forms of closures.
-Closure can take one the three forms. 
+Closure can take one of the three forms. 
   1. Global functions are closures that have a name and don't capture any values. 
   2. Nested functions are closures that have a name and can capture values from their enclosing function. 
   3. Closure expressions are unnamed closures written in a lightweight syntax that can capture values from their surrounding context. 
