@@ -1,0 +1,122 @@
+Model custom types that define a list of possible values. 
+
+1. What is an Enumerations?
+Defines a common type for a group of related values and enables you to work with those values in a type-safe way within your code. 
+
+2. What is raw value in enum?
+Its a value provided for enum cases, the value can be a string, a character, or a value of any integer or floating-point type. 
+Pre-populated default values which are all of same type. 
+When enum is of type "Int", default raw value is 0. 
+When enum is of type "String", default raw value is "text of that case's name"
+You can initialise enum case by its raw value. 
+let possiblePlanet = Planet(rawValue: 7)
+// possiblePlanet is of type Planet? and equals Planet.uranus
+
+When initiased with raw value it returns the "optional" enum case. 
+The raw value initializer is a "failable initializer", because not every raw value will return an enumeration case.
+
+3. What is associated values in enum?
+Its value stored along with the different case value. 
+
+4. How enum in swift differs from other language enum?
+Enum is swift is first-class type. 
+Adopt many features traditionally supported only by classes, 
+- such as computed properties to provide additional information about enum's current value.
+- instance methods to provide functionality related to the values the enum represents. 
+- can also defines initializers to provide initial case value. 
+- can be extended to expand their functionality beyond their original implementation. 
+- can confirm to protocols to provide standard functionality.
+
+5. How you define the enum?
+enum keyword with captilised name of enum. 
+You use the "case" keyword introduce the new enumeration cases. 
+Multiple cases can appear on a single line, seperated by commas.
+
+enum SomeEnumeration {
+// enum definition goes here 
+}
+
+enum CompassPoint {
+ case north 
+ case south 
+ case east 
+ case west 
+}
+
+6. How can you match enum cases with individual value?
+By using the switch. 
+
+7. How can you iterate over all cases of enum?
+By adopting the "CaseIterable" protocol. This expose enum to use the "allCases" property of enum to iterate over all cases. 
+
+enum Bevarages: CaseIterable {
+  case coffee
+  case tea
+  case juice 
+}
+
+let numberOfChoices = Bevarages.allCases.count 
+print("\(numberOfChoices) bevarages available") 
+// Prints "3 beverages available"
+
+You can also use the "allCases" like any other collection. 
+for beverage in Beverage.allCases {
+    print(beverage)
+}
+// coffee
+// tea
+// juice
+
+8. What is associated values in swift enum?
+The additional information stored along with value of enum case is the associated vlaue of an enum case. 
+
+You can define Swift enum to store associated values of any given type, an the value types can be different for each case of the enumeration if needed. 
+
+enum Barcode {
+    case upc(Int, Int, Int, Int)
+    case qrCode(String)
+}
+
+var productBarcode = Barcode.upc(8, 85909, 51226, 3)
+
+You can extract the associated value of the case either as constant (let) or variable (var). 
+
+switch productBarcode {
+case .upc(let numberSystem, let manufacturer, let product, let check):
+    print("UPC: \(numberSystem), \(manufacturer), \(product), \(check).")
+case .qrCode(let productCode):
+    print("QR code: \(productCode).")
+}
+// Prints "QR code: ABCDEFGHIJKLMNOP."
+
+If all of the associated values for an enumeration case are extracted as constants, or if all are extracted as variables, 
+you can place a single let or var annotation before the case name, for brevity:
+
+switch productBarcode {
+case let .upc(numberSystem, manufacturer, product, check):
+    print("UPC : \(numberSystem), \(manufacturer), \(product), \(check).")
+case let .qrCode(productCode):
+    print("QR code: \(productCode).")
+}
+// Prints "QR code: ABCDEFGHIJKLMNOP."
+
+9. What is recursive enumeration?
+A recursive enumeration is an enumeration that has another instance of the enumeration as associated value for one or more of the enum cases. 
+You indicate that an enumeration case is recursive by writing "indirect" before it, which tells the compiler to insert the necessary layer of indirection.
+
+enum ArithmeticExpression {
+    case number(Int)
+    indirect case addition(ArithmeticExpression, ArithmeticExpression)
+    indirect case multiplication(ArithmeticExpression, ArithmeticExpression)
+}
+
+You can also write indirect before the beginning of the enumeration to enable indirection for all of the enumeration’s cases that have an associated value.
+
+indirect enum ArithmeticExpression {
+    case number(Int)
+    case addition(ArithmeticExpression, ArithmeticExpression)
+    case multiplication(ArithmeticExpression, ArithmeticExpression)
+}
+
+10. 
+
