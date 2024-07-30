@@ -1,0 +1,53 @@
+Structures and Classes are general-purpose, flexible constructs that become the building blocks of program's code. 
+
+In swift, structures and classes are defined in the single file. 
+
+1. Explain the common features in structures and classes.
+a. Define properties to store values 
+b. Define methods to provide functionality 
+c. Define subscripts to provide access to their values using subscript syntax
+d. Define initialisers to set up their initial values. 
+e. Be extended to expand their functionality beyond a default implementations. 
+f. confirm to protocols to provide standard functionality of a certain kind. 
+
+2. What are the additional functionality of Classes compare to structures. 
+a. Inheritance enables one class to inherit the characteristics of another 
+b. Type casting enables you to check and interpret the type of a class instance at runtime. 
+c. Deinitializers enable an instance of a class to free up any resources it has assigned. 
+d. Reference counting allows more than one reference to a class instance. 
+
+
+3. Why structures compare to classes?
+Local reasoning will be complex in case of classes. 
+Capabilities that class support come at the cost of increased complexity. 
+
+4. Explain the syntax of structure. 
+Whenever you define a new structure or class, you define a new Swift type
+struct SomeStructure {
+    // structure definition goes here
+}
+
+5. Explain the syntax of class. 
+class SomeClass {
+    // class definition goes here
+}
+
+6. How do you create instance of structure or class?
+let someResolution = Resolution()
+let someVideoMode = VideoMode()
+
+7. How do you access the property of a struct or class?
+You can access the properties of an instance using dot syntax. In dot syntax, 
+you write the property name immediately after the instance name, separated by a period (.), without any spaces
+
+print("The width of someResolution is \(someResolution.width)")
+// Prints "The width of someResolution is 0"
+
+8. Does class has memberwise default intitaliser?
+Unlike structures, class does not have memberwise default initialiser.
+
+9. Explain value type.
+A value type is a type whose value is copied when it's assigned to a variable or constant, or when it's passed to a function. 
+Structure and Enumeration are value types. 
+
+10. How swift handles 
