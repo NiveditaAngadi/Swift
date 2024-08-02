@@ -1,0 +1,204 @@
+Properties 
+Access stored and computed values that are part of an instance or type.
+
+1. What are properties?
+Properties associate values with a particular class, structure, or enumerations. 
+
+2. Define types of properties.
+- Stored Properties 
+- Computed properties 
+- Type properties 
+
+3. What is stored properties?
+Stored properties store constant and variable values as part of an instance. 
+Provided only by classes and structures. 
+Associated with the instance of a particular type. 
+Either constant(let) or variable(var) stored properties.
+You can provide a default value for a stored property as part of its definition. 
+You can also set and modify the initial value for a stored property during initialization.
+
+struct FixedLengthRange {
+    var firstValue: Int
+    let length: Int
+}
+var rangeOfThreeItems = FixedLengthRange(firstValue: 0, length: 3)
+// the range represents integer values 0, 1, and 2
+rangeOfThreeItems.firstValue = 6
+// the range now represents integer values 6, 7, and 8
+
+4. Can you modify the properties when structure instance assigned to a constant. 
+No, You can't modify the properties of structure instance, when its assigned to the constant, even though declared properties are variables.
+This behavior is due to structures being value types. When an instance of a value type is marked as a constant, so are all of its properties.
+
+let rangeOfFourItems = FixedLengthRange(firstValue: 0, length: 4)
+// this range represents integer values 0, 1, 2, and 3
+rangeOfFourItems.firstValue = 6
+// this will report an error, even though firstValue is a variable property
+
+5. Can you modify the properties when class instance assigned to a constant. 
+Yes. You can modify the value of variable properties of class instance, even though its assigned to the constant. 
+The same isn’t true for classes, which are reference types. If you assign an instance of a reference type to a constant, you can still change that instance’s variable properties.
+
+6. What is Lazy Stored Properties?
+A lazy stored properties is a property whose initial value isn't calculated until the first time it's used. 
+You indicate a lazy stored property by writing the lazy modifier before its declaration.
+
+7. Should I declare lazy as constant in swift?
+No, you should always declare a lazy property as a variable(with var keyword), becuase its initial value might not be retrieved until after instance initailzation completes.
+Constant properties must always have a value before initialization completes, and therefore can’t be declared as lazy.
+
+8. When should use lazy property?
+1. Initial value for a property is dependent on outside factors whose values aren't known until after an instance's initialization is complete. 
+2. When initial value for a property requires complex or computationally expensive setup that shouldn't be performed unless or until it's needed. 
+
+9. Is there thread safety for lazy variables?
+If property marked with the lazy modifier is accessed by multiple threads simultaneously and property hasn't yet been initialized,there's no guarantee that the property will be initialized 
+only once. 
+
+10. Give example of lazy stored property.
+struct Person {
+  let name: String 
+  let age: Int 
+}
+
+struct PeopleViewModel {
+let people: [Person]
+
+lazy var oldest: Person? = {
+  print("Lazy var oldest initialized")
+  return people.max(by: { $0.age < $1.age })
+}()
+
+ init(people: [Person]) {
+        self.people = people
+        print("View model initialized")
+    }
+}
+
+var viewModel = PeopleViewModel(people: [
+    Person(name: "Antoine", age: 30),
+    Person(name: "Jaap", age: 3),
+    Person(name: "Lady", age: 3),
+    Person(name: "Maaike", age: 27)
+])
+
+print(viewModel.oldest)
+// Prints: "oldest person calculated"
+// Prints: Person(name: "Antoine", age: 30)
+
+viewModel.people.append(Person(name: "Jan", age: 69))
+print(viewModel.oldest)
+// Prints: Person(name: "Antoine", age: 30) // After initailzing variable once, its done. It wont calculate again. 
+
+11. When to use computed property and lazy property?
+When you want to consider the actual state of the instance for the calculation, then go for computed property. 
+When you dependent only on the current state(which may not modify) then, go for lazy. 
+
+12. Are lazy stored properties are mutable?
+Yes. Lazy properties are mutable. 
+This means you can only call lazy variables on mutable structs.
+let viewModel = PeopleViewModel(people: [
+Person (name: "Antoine", age: 30),
+Person(name: "Jaap", age: 3),
+Person (name: "Lady", age: 3),
+Person (name: "Maaike", age: 27)
+1)
+print(viewModel.oldest)
+// Error: Cannot use mutating getter on immutable value: ‘viewModel’ is a ‘let’ constant
+This is only the case for value types, in this case, a struct. If our view model would’ve been a class, this error wouldn’t occur. 
+
+13. What is computed properties?
+Computed properties calcute values. 
+Provided by classes,structures and enumerations. 
+Associated with the instance of a particular type. 
+
+Compueted properties don't store values, instead they compute values. Provide a getter and an optional setter to retrieve and set other peoperties and values indirectly. 
+
+struct Point {
+    var x = 0.0, y = 0.0
+}
+struct Size {
+    var width = 0.0, height = 0.0
+}
+struct Rect {
+    var origin = Point()
+    var size = Size()
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            let centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set(newCenter) {
+            origin.x = newCenter.x - (size.width / 2)
+            origin.y = newCenter.y - (size.height / 2)
+        }
+    }
+}
+var square = Rect(origin: Point(x: 0.0, y: 0.0),
+    size: Size(width: 10.0, height: 10.0))
+let initialSquareCenter = square.center
+// initialSquareCenter is at (5.0, 5.0)
+square.center = Point(x: 15.0, y: 15.0)
+print("square.origin is now at (\(square.origin.x), \(square.origin.y))")
+// Prints "square.origin is now at (10.0, 10.0)"
+
+14. What is shorthand setter declaration?
+If a computed property’s setter doesn’t define a name for the new value to be set, a default name of newValue is used.
+struct AlternativeRect {
+    var origin = Point()
+    var size = Size()
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            let centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set {
+            origin.x = newValue.x - (size.width / 2)
+            origin.y = newValue.y - (size.height / 2)
+        }
+    }
+}
+
+15. Explain shorthand getter declaration.
+If the entire body of a getter is a single expression, the getter implicitly returns that expression. 
+struct CompactRect {
+    var origin = Point()
+    var size = Size()
+    var center: Point {
+        get {
+            Point(x: origin.x + (size.width / 2),
+                  y: origin.y + (size.height / 2))
+        }
+        set {
+            origin.x = newValue.x - (size.width / 2)
+            origin.y = newValue.y - (size.height / 2)
+        }
+    }
+}
+
+16. What is read-only computed property?
+A computed property with a getter but no setter is known as a read-only computed property.
+A read-only computed property always returns a value, and can be accessed through dot syntax, but can’t be set to a different value.
+
+You must declare computed properties — including read-only computed properties — as variable properties with the var keyword, 
+because their value isn’t fixed. The let keyword is only used for constant properties,
+to indicate that their values can’t be changed once they’re set as part of instance initialization.
+
+You can simplify the declaration of a read-only computed property by removing the get keyword and its braces.
+struct Cuboid {
+    var width = 0.0, height = 0.0, depth = 0.0
+    var volume: Double {
+        return width * height * depth
+    }
+}
+let fourByFiveByTwo = Cuboid(width: 4.0, height: 5.0, depth: 2.0)
+print("the volume of fourByFiveByTwo is \(fourByFiveByTwo.volume)")
+// Prints "the volume of fourByFiveByTwo is 40.0"
+
+17. Explain Property Observers?
+Property observers are willSet and getSet
+
+7. What is type properties?
+Properties are associated with the type itself. 
