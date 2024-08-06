@@ -198,7 +198,267 @@ print("the volume of fourByFiveByTwo is \(fourByFiveByTwo.volume)")
 // Prints "the volume of fourByFiveByTwo is 40.0"
 
 17. Explain Property Observers?
-Property observers are willSet and getSet
+Property observers observe and respond to changes in a property's value. Property observers are called everytime a property's value is set, 
+even if the new value is the same as the property's current value. 
 
-7. What is type properties?
-Properties are associated with the type itself. 
+18. Where you can add property observers?
+1. Stored properties that you define
+2. Stored properties that you inherit 
+3. Computed properties that you inherit 
+
+19. What are two property observers?
+1. "willSet" is called just before the value is stored.
+2. "didSet" is called immediately after the new value is stored. 
+
+20. Give example of willSet and didSet property observer. 
+class StepCounter {
+ var totalSteps: Int = 0 {
+  willSet(newTotalSteps) {
+      print("About to set totalSteps to \(newTotalSteps)")
+  }
+  didSet {
+    if totalSteps > oldValue  {
+         print("Added \(totalSteps - oldValue) steps")
+        }
+      }
+    }
+}
+let stepCounter = StepCounter()
+stepCounter.totalSteps = 200
+// About to set totalSteps to 200
+// Added 200 steps
+stepCounter.totalSteps = 360
+// About to set totalSteps to 360
+// Added 160 steps
+stepCounter.totalSteps = 896
+// About to set totalSteps to 896
+// Added 536 steps
+
+21. What is oldValue parameter in didSet?
+The didSet observer doesn’t provide a custom parameter name for the old value, and the default name of oldValue is used instead.
+
+22. In case of in-out parameter will the property observers called everytime?
+Yes. If you pass a property that has observers to a function as an in-out parameter, the willSet and didSet observers are always called.
+This is because of the copy-in copy-out memory model for in-out parameters: The value is always written back to the property at the end of the function.
+
+23. What is property wrappers?
+A property wrapper adds a layer of seperation between code that manages how a property is stored and code that defines a property. 
+When you write the managment code once when you define the wrapper, and then reuse that managment code by applying it to multiple properties. 
+Associated logic that triggered everytime when value is modified.These kind of logic we can directly write into property, with the help of property wrappers.
+Basically, property wrapper is essentially a type that wraps a given value in order to attach additional logic to it. 
+It can be implemented with struct, enum and classes. 
+
+24. What are the benefits of property wrappers?
+Code resue and generalization. 
+Code reuse and customizability, and enables powerful new ways to implement property-level functionality. 
+One of the major benefits of property wrappers is that they enable us to add logic and behaviors to properties in a way that doesn’t impact our call sites at all — 
+as values are read and written the exact same way regardless of whether a property is wrapped or not.
+
+25. Drawback of property wrapper?
+ On the other hand, the risk is that we’ll end up hiding too much functionality behind what might be a quite non-obvious abstraction.
+
+26. Explain Property Wrappers with the example.
+1. mention @propertyWrapper attribute before struct/class/enum
+2. should contain stored property called - "wrappedValue", which tells swift which underlying value that's being wrapped. 
+
+@propertyWrapper 
+struct Capitalized {
+var wrappedValue: String {
+didSet { wrappedValue = wrappedValue.capitalized } 
+}
+init(wrappedValue: String) {
+self.wrappedValue = wrappedValue.capitalized
+}
+}
+
+Struct User {
+ @Capitalized var firstName: String 
+ @Capitalized var lastName: String 
+}
+
+var user = User(firstName: "nivedita", lastName: "angadi")
+// Nivedita Angadi 
+
+user.lastName = "a"
+// Nivedita A
+
+We can even natively assign default values to our wrapped properties
+struct Document {
+    @Capitalized var name = "Untitled document"
+}
+
+2. The setter ensures that new values are less than or equal to 12, and the getter returns the stored value.
+@propertyWrapper 
+struct TwelveOrLess {
+private var number = 0 
+var wrappedValue: Int {
+get { return number }
+set { number = min(newValue, 12) }
+}
+}
+struct SmallRectangle {
+@TwelveOrLess var height: Int 
+@TwelveOrLess var width: Int 
+}
+
+var rectangle = SmallRectangle() 
+print(rectangle.height)
+// prints "0"
+
+rectangle.height = 24 
+print(rectangle.height)
+//prints 12 
+
+27. What happens internally when you apply the propert wrapper?
+When you apply a wrapper to a property, the compiler synthesizes code that provides storage for the wrapper and code that provides access to the property 
+through the wrapper. 
+The property wrapper responsible for storing the wrapped value, so there's no synthesized code for that. 
+
+28. Can you provide the initial values for wrapped properties?
+Yes. You can provide initial values via initializers. 
+@propertyWrapper 
+struct SmallNumber {
+ private var maximum: Int 
+ private var number: Int 
+
+ var wrappedValue: Int {
+    get { return number } 
+    set { number = min(newVlaue, maximum) } 
+ } 
+
+ init() {
+maximum = 12 
+number = 0 
+ }
+
+init(wrappedValue: Int) {
+maximum = 12
+number = min(wrappedValue, maximum) 
+}
+
+init(wrappedValue: Int, maximum: Int) {
+self.maximum = maximum 
+number = min(wrappedValue, maximum)
+}
+}
+
+struct ZeroRectangle {
+@SmallNumber var height: Int 
+@SmallNumber var width: Int 
+}
+
+var zeroRectangle = ZeroRectangle()
+print(zeroRectangle.height, zeroRectangle.width)
+
+struct UnitRectangle {
+  @SmallNumber var height: Int = 1
+  @SmallNumber var width: Int = 1
+}
+
+var unitRectangle = UnitRectangle()
+print(unitRectangle.height, unitRectangle.width)
+
+// init(wrappedValue:) will get called. 
+
+struct NarrowRectangle {
+ @SmallNumber(wrappedValue: 2, maximum: 5) var height: Int 
+ @SmallNumber(wrappedValue: 3, maximum: 4) var width: Int
+}
+
+var narrowRectangle = NarrowRectangle()
+print(narrowRectangle.height, narrowRectangle.width)
+// Prints "2, 3"
+
+narrowRectangle.height = 100 
+narrowRectangle.width = 100 
+print(narrowRectanagle.height, narrowRectangle.width)
+// Prints "5, 4"
+
+29. What is Projected value in property wrapper?
+Sometimes we want to access the property wrapper iteself, instead of value that it's wrapping. 
+The name of the projected value is same as the wrapped value, except it begins with $. 
+Because your code can’t define properties that start with $ the projected value never interferes with properties you define. Its basically 
+explosing property warppers it self. 
+
+30. What are global varibales?
+Global variables are variables that are defined outside of any function, method, closure, or type context. 
+Global constants and variables are always computed lazily, in a similar manner to Lazy Stored Properties. 
+Unlike lazy stored properties, global constants and variables don’t need to be marked with the lazy modifier.
+
+31. What are Local variables?
+Local variables are variables that are defined within function, method or closure context. 
+Local constants and variables are never computed lazily.
+
+32. What are stored variables?
+Stored properties, provide storage for a value of a certain type and allow that value to be set and retrieved. 
+
+33. What are computed variables?
+Computed variables calculate their value, rather than storing it, and they’re written in the same way as computed properties.
+
+34. Can you apply property wrapper to the global variables?
+No, you can not. 
+You can apply a property wrapper to a local stored variable, but not to a global variable or a computed variable.
+
+35. What is type properties?
+Properties are belongs to the type itself, not to any one instance of that type.
+There will only ever be one copy of these properties, no matter how many instances of that type you create.
+
+Type properties are useful for defining values that are universal to all instances of a particular type, 
+such as a constant property that all instances can use (like a static constant in C), 
+or a variable property that stores a value that’s global to all instances of that type (like a static variable in C).
+
+Stored type properties can be variables or constants.
+Computed type properties are always declared as variable properties, in the same way as computed instance properties.
+
+36. Explain about stored type property.
+Unlike stored instance properties, you must always give stored type properties a default value. 
+This is because the type itself doesn’t have an initializer that can assign a value to a stored type property at initialization time.
+Stored type properties are lazily initialized on their first access. 
+They’re guaranteed to be initialized only once, even when accessed by multiple threads simultaneously, 
+and they don’t need to be marked with the lazy modifier.
+
+37. How do you define the type property?
+You define type properties with the static keyword.
+For computed type properties for class types, you can use the class keyword instead to allow subclasses to override the superclass’s implementation. 
+
+38. Give example of type properties.
+struct SomeStructure {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 1
+    }
+}
+print(SomeStructure.storedTypeProperty)
+// Prints "Some value."
+SomeStructure.storedTypeProperty = "Another value."
+print(SomeStructure.storedTypeProperty)
+// Prints "Another value."
+
+enum SomeEnumeration {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 6
+    }
+}
+print(SomeEnumeration.computedTypeProperty)
+// Prints "6"
+
+class SomeClass {
+    static var storedTypeProperty = "Some value."
+    static var computedTypeProperty: Int {
+        return 27
+    }
+    class var overrideableComputedTypeProperty: Int {
+        return 107
+    }
+}
+print(SomeClass.computedTypeProperty)
+// Prints "27"
+
+
+39. 
+
+
+Refernce:
+https://www.swiftbysundell.com/articles/property-wrappers-in-swift/
+https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties
