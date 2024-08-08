@@ -1,0 +1,72 @@
+Methods 
+Define and call functions that are part of an instance or type. 
+
+
+1. Difference between function and method
+
+Function - 
+Functions are self-contained chunks of code that perform a specific task.
+
+Method - 
+Methods are functions that are associated with a particular type. Classes, structures, 
+and enumerations can all define instance methods, which encapsulate specific tasks and
+functionality for working with an instance of a given type. 
+
+Classes, structures, and enumerations can also define type methods, which are associated with the type itself. 
+Type methods are similar to class methods in Objective-C.
+
+2. Difference between Objective-C and Swift methods. 
+In Objective-C, classes are the only types that can define methods. In Swift, you can choose whether to define a class, structure, or enumeration, 
+and still have the flexibility to define methods on the type you create.
+
+3. What is instance method?
+Instance methods are functions that belong to instances of a particular class, structure, or enumeration. 
+They support the functionality of those instances, either by providing ways to access and modify instance properties, or by providing 
+functionality related to the instance’s purpose.
+
+4. Define functiona parameter and argument label.
+Function parameters can have both a name (for use within the function’s body) and an argument label (for use when calling the function), as method too. 
+
+5. What is self property?
+Every instance of a type has an implicit property called self, which is exactly equivalent to the instance itself.
+
+6. How do you modify value types from within instance methods?
+Structures and enumerations are value types. By default, the properties of a value type can’t be modified from within its instance methods.
+However, if you need to modify the properties of your structure or enumeration within a particular method, you can opt in to mutating behavior for that method
+The method can then mutate (that is, change) its properties from within the method, and any changes that it makes are written back to the original 
+structure when the method ends. 
+The method can also assign a completely new instance to its implicit self property, and this new instance will replace the existing one when the method ends.
+You can opt in to this behavior by placing the mutating keyword before the func keyword for that method.
+
+The mutating keyword is added to its definition to enable it to modify its properties.
+
+struct Point {
+    var x = 0.0, y = 0.0
+    mutating func moveBy(x deltaX: Double, y deltaY: Double) {
+        x += deltaX
+        y += deltaY
+    }
+}
+var somePoint = Point(x: 1.0, y: 1.0)
+somePoint.moveBy(x: 2.0, y: 3.0)
+print("The point is now at (\(somePoint.x), \(somePoint.y))")
+// Prints "The point is now at (3.0, 4.0)"
+
+7. Can I call mutating method on constant value type?
+You can’t call a mutating method on a constant of structure type, because its properties can’t be changed, even if they’re variable properties
+
+let fixedPoint = Point(x: 3.0, y: 3.0)
+fixedPoint.moveBy(x: 2.0, y: 3.0)
+// this will report an error
+
+8. Can I assign to self within a mutating method?
+Mutating methods can assign an entirely new instance to the implicit self property. 
+
+struct Point {
+    var x = 0.0, y = 0.0
+    mutating func moveBy(x deltaX: Double, y deltaY: Double) {
+        self = Point(x: x + deltaX, y: y + deltaY)
+    }
+}
+
+9. 
