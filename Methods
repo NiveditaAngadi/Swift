@@ -69,4 +69,16 @@ struct Point {
     }
 }
 
-9. 
+9. What is type method?
+Method that is called on type itself.
+You indicate type methods by writing the static keyword before the method’s func keyword. 
+Classes can use the class keyword instead, to allow subclasses to override the superclass’s implementation of that method.
+Within the body of a type method, the implicit self property refers to the type itself, rather than an instance of that type. 
+A type method can call another type method with the other method’s name, without needing to prefix it with the type name.
+Similarly, type methods on structures and enumerations can access type properties by using the type property’s name without a type name prefix.
+
+10. Difference between Objective-C and Swift type method.
+In Objective-C, you can define type-level methods only for Objective-C classes. 
+In Swift, you can define type-level methods for all classes, structures, and enumerations. Each type method is explicitly scoped to the type it supports.
+
+11. 
