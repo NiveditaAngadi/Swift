@@ -81,4 +81,4 @@ Similarly, type methods on structures and enumerations can access type propertie
 In Objective-C, you can define type-level methods only for Objective-C classes. 
 In Swift, you can define type-level methods for all classes, structures, and enumerations. Each type method is explicitly scoped to the type it supports.
 
-11. 
+
