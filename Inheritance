@@ -43,6 +43,14 @@ You prefix your overriding definition with the "override" keyword.
 7. How do you access the superclass version of a method, properties or subscripts?
 By using "super" prefix. 
 
-8. 
+8. How do you prevent overrides? 
+You can prevent a method, property, or subscript from being overriden by marking it as final. Mention "final" before the name of the method, property, or subscript. 
+
+9. What happens when you attempt to override final method or property?
+An attempt to override a final method, property, or subscript in a subclass is reported as compile time error. 
+
+10. In an extension can the method, property can be marked as final?
+Yes. 
+
 
 
