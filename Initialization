@@ -4,3 +4,27 @@ Set the initial values for a type's stored properties and perform one-time setup
 Initialization is the process of preparing class, structure, enumeration for use. This process involves setting an initial value for each stored property on that instance and performing
 any other setup or initailzation that required before the new instance is ready for use. 
 
+2. Does swift initializer returns a value?
+No
+
+3. What is deinitializer?
+Method which performs any custom cleanup just before an instance of that class is deallocated. 
+
+4. Is it compulasary to set an intial value to stored property by the time an instance of that class or structure is created?
+Yes. Stored property can not be left indeterminate state. 
+
+5. What are the ways for setting value to the stored property?
+1. You can set value to the stored property within an initializer. 
+2. By assigning a default property value as part of the property's definition. 
+
+6. Property of optional type are initialized to what value?
+Property of optional type are automatically initialized to nil. 
+
+7. Can you modify the value of constant property, once its value is assigned?
+No. 
+
+8. What is default initializer?
+Swift provides a default initializer for any structure or class that provides default values for all of its properties. The default initializer simply creates a new instance with all of 
+its properties set to their default values.
+
+9. What is memberwise initializer for structure types?
