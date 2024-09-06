@@ -28,3 +28,75 @@ Swift provides a default initializer for any structure or class that provides de
 its properties set to their default values.
 
 9. What is memberwise initializer for structure types?
+Structure types automatically receive a memberwise initializer if they don’t define any of their own custom initializers. 
+The memberwise initializer is a shorthand way to initialize the member properties of new structure instances.
+Initial values for the properties of the new instance can be passed to the memberwise initializer by name.
+
+10. What is initializer delegation?
+Initializers can call other initializers to perform part of an instance's initialization. This process known as initialiser delegation. 
+This avoids duplicating code across multiple initializers. 
+
+11. What is value type initializer delegation?
+In value type initializer delgation is relatively simple. Since, it won't support the inheritance, they can only delegate another initializer that they provide themselves. 
+For value types, you use self.init to refer to other initializers from the same value type when writing your own custom initializers. 
+You can call self.init only from within an initializer.
+
+12. Can we call memberwise initializer, if define the custom initializer?
+Note that if you define a custom initializer for a value type, 
+you will no longer have access to the default initializer (or the memberwise initializer, if it’s a structure) for that type. 
+This constraint prevents a situation in which additional essential setup provided in a more complex initializer is accidentally circumvented by 
+someone using one of the automatic initializers.
+
+13. Explain about the class's intialization.
+All of a class's stored properties - including any properties the class inherits from its superclass - must be assigned as initial value during initialization. 
+
+14. How swift makes sure all stored properties of class initialized?
+Swift defines two kinds of initializers for class types to help all stored properties receive an initial value. 
+These are known as designated initializers and convenience initializers. 
+
+15. What is designated initializers?
+Designated initializers are the primary initializers for a class. 
+A designated initializer fully initializes all properties introduced by that class and calls an appropriate superclass initializer to continue the initialization process continues up 
+the superclass chain. 
+
+init(<#parameters#>) {
+<#statements#>
+}
+
+16. What is conveniece initializers?
+Convenience initializers are secondary initializers for a class. You can define a convenience initializers to call a designated initilizer from the same class as the convenience initializers 
+with some of the designated initializers parameters set to defalut values. 
+You can also define a convenience initializer to create an instance of that class for a specific use case or input value type.
+Providing the convenience initializer is optional/need basis. 
+
+convenience init(<#parameters#>) {
+<#statements#>
+}
+
+17. Explain rules in initializer delegation for class types.
+To simplify the relationships between designated and convenience initializers, swift applies 3 rules for delegation class between initializers, 
+Rule 1: 
+A designated initializer must call a designated initializer from its immediate superclass.
+
+Rule 2: 
+A convenience initializer must call another initializer from the same class.
+
+Rule 3:
+A convenience initializer must ultimately call a designated initializer.
+
+A simple way to remember this is:
+Designated initializers must always delegate up.
+Convenience initializers must always delegate across.
+
+18. What is two-phase initialization?
+Class initialization in Swift is a two-phase process. 
+In the first phase, each stored property is assigned an initial value by the class that introduced it. Once the initial state for every stored property has been determined,
+the second phase begins, and each class is given the opportunity to customize its stored properties further before the new instance is considered ready for use. 
+
+19. Why two-phase initialization?
+The use of two-phase initialization process makes initialization safe, while still giving complete flexibility to each class in a class hierarchy. 
+Two-phase initialization prevents property values from being accessed before they’re initialized,
+and prevents property values from being set to a different value by another initializer unexpectedly.
+
+20. 
+
