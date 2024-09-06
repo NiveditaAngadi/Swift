@@ -98,5 +98,48 @@ The use of two-phase initialization process makes initialization safe, while sti
 Two-phase initialization prevents property values from being accessed before they’re initialized,
 and prevents property values from being set to a different value by another initializer unexpectedly.
 
-20. 
+20. By default swift initializers are inherited in class?
+No. Swift subclasses don't inherit their superclass initializers by default. 
+Swift’s approach prevents a situation in which a simple initializer from a superclass is inherited by a more specialized subclass and is used to create a new instance of the subclass 
+that isn’t fully or correctly initialized.
+
+21. What will be the solution if subclass present same initializers as its superclass?
+Provide the custom implementation of those initializers within the subclass. 
+When you write a subclass initializer that matches a superclass designated initializer, you are effectively providing an override of that designated initializer. 
+Therefore, you must write the override modifier before the subclass’s initializer definition. 
+Note that, 
+Conversely, if you write a subclass initializer that matches a superclass convenience initializer, 
+that superclass convenience initializer can never be called directly by your subclass, 
+as per the rules described above in Initializer Delegation for Class Types. Therefore, 
+your subclass is not (strictly speaking) providing an override of the superclass initializer. 
+As a result, you don’t write the override modifier when providing a matching implementation of a superclass convenience initializer.
+
+22. In which case subclass can automatically inherit super class initializers?
+Subclasses don’t inherit their superclass initializers by default. However, superclass initializers are automatically inherited if certain conditions are met.
+Assuming that you provide default values for any new properties you introduce in a subclass, the following two rules apply:
+Rule 1:
+If your subclass doesn’t define any designated initializers, it automatically inherits all of its superclass designated initializers.
+
+Rule 2: 
+If your subclass provides an implementation of all of its superclass designated initializers — either by inheriting them as per rule 1, 
+or by providing a custom implementation as part of its definition — then it automatically inherits all of the superclass convenience initializers.
+
+23. What is Failable initializers?
+There are cases where initialization may fail due to invalid initialization parameter values, the absence of a required external resource, or some other condition that prevents initialization
+from succeeding.
+
+To cope with initialization conditions that can fail, define one or more failable initializers as part of a class, structure, or enumeration definition. 
+You write a failable initializer by placing a question mark after the init keyword (init?).
+
+Note:
+You can’t define a failable and a nonfailable initializer with the same parameter types and names.
+
+A failable initializer creates an optional value of the type it initializes. 
+You write return nil within a failable initializer to indicate a point at which initialization failure can be triggered.
+
+24. Enumeration with raw value - explain the failable initializer 
+Enumerations with raw values automatically receive a failable initializer, init?(rawValue:), 
+that takes a parameter called rawValue of the appropriate raw-value type and selects a matching enumeration case if one is found, 
+or triggers an initialization failure if no matching value exists.
+
 
