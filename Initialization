@@ -125,10 +125,12 @@ If your subclass provides an implementation of all of its superclass designated 
 or by providing a custom implementation as part of its definition — then it automatically inherits all of the superclass convenience initializers.
 
 23. What is Failable initializers?
-There are cases where initialization may fail due to invalid initialization parameter values, the absence of a required external resource, or some other condition that prevents initialization
+There are cases where initialization may fail due to invalid initialization parameter values, 
+the absence of a required external resource, or some other condition that prevents initialization
 from succeeding.
 
-To cope with initialization conditions that can fail, define one or more failable initializers as part of a class, structure, or enumeration definition. 
+To cope with initialization conditions that can fail, define one or more failable initializers as part of a class, 
+structure, or enumeration definition. 
 You write a failable initializer by placing a question mark after the init keyword (init?).
 
 Note:
@@ -141,5 +143,50 @@ You write return nil within a failable initializer to indicate a point at which 
 Enumerations with raw values automatically receive a failable initializer, init?(rawValue:), 
 that takes a parameter called rawValue of the appropriate raw-value type and selects a matching enumeration case if one is found, 
 or triggers an initialization failure if no matching value exists.
+
+25. Explain propogation of Initialization failure. 
+A failable initializer of a class, structure, or enumeration can delegate across to another failable initializer from the same class, structure,
+or enumeration. 
+Similarly, a subclass failable initializer can delegate up to a superclass failable initializer. 
+
+In either case, if you delegate to another initializer that causes initialization to fail, the entire initialization process fails immediately, 
+and no further initialization code is executed.
+
+26. Can you override the failiable initializer?
+Yes. Subclass can override the failiable initializer of the the superclass. 
+Nonfailiable initializer of the subclass can override the failiable initializer of the the superclass and only way to delegate 
+up to the superclass initializer is to force-unwrap the result of the failiable superclass initializer. 
+
+27. How do you make sure that subclass must implement initializer of superclass?
+By "required" modifier before the definition of a class initializer to indicate that every subclass of the class must implement that initializer. 
+You must also write the required modifier before every subclass implementation of a required initializer, to indicate that the initializer requirement applies to further subclasses in the chain. 
+You don’t write the override modifier when overriding a required designated initializer:
+
+class SomeClass {
+    required init() {
+        // initializer implementation goes here
+    }
+}
+
+class SomeSubclass: SomeClass {
+    required init() {
+        // subclass implementation of the required initializer goes here
+    }
+}
+
+28. How do you set the property vlaue by closure or definition?
+class SomeClass {
+    let someProperty: SomeType = {
+        // create a default value for someProperty inside this closure
+        // someValue must be of the same type as SomeType
+        return someValue
+    }()
+}
+
+Note that the closure’s end curly brace is followed by an empty pair of parentheses. 
+This tells Swift to execute the closure immediately. If you omit these parentheses, 
+you are trying to assign the closure itself to the property, and not the return value of the closure.
+
+
 
 
