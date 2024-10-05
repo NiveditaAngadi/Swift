@@ -2,4 +2,56 @@ Macros
 Use macros to generate code at compile time. 
 
 1. What is Macros?
-Macros transform your source code when you compile it, letting you avoid writing repetative 
+Macros transform your source code when you compile it, letting you avoid writing repetative code by hand. During compilation, swift expands
+any macros in your code before building your code as usaul. 
+
+2. Explain types of Macros 
+a. Freestanding macros -> Appear on their own, without being attached to a declaration. 
+b. Attached macros -> Modify the declaration that they're attached to. 
+
+You call attached and freestanding macros slightly differently, but they both follow the same model for macro expansion, you implement them both
+using the same approach. 
+
+3. Explain free standing macros.
+Freestanding macros called by mentioning # before its name, you write any arguments to the macro in parantheses after its name. 
+func myFunction() {
+ print("Currently running \(#function)")
+ #warning("Something's wrong") 
+}
+
+// Currently running myFunction()
+
+Freestanding macros -
+- can produce a value 
+- they can perform an action at compile time. 
+
+4. Explain Attached macros. 
+Attached macros are called by mentioning @ before the name of the macro, and you write any arguments to the macro in parantheses after its name. 
+Without macro:
+struct SundaeToppings: OptionSet {
+    let rawValue: Int
+    static let nuts = SundaeToppings(rawValue: 1 << 0)
+    static let cherry = SundaeToppings(rawValue: 1 << 1)
+    static let fudge = SundaeToppings(rawValue: 1 << 2)
+}
+
+With macro:
+@OptionSet<Int>
+struct SundaeToppings {
+    private enum Options: Int {
+        case nuts
+        case cherry
+        case fudge
+    }
+}
+
+5. Benefits of macros. 
+a. Generates the code thats easier to read
+b. Easier to maintain than manually coded version. 
+
+6. Explain Macro declaration 
+Macros declaration and definition are seperate. 
+Declaration -> contains its name, the parameters it takes, where it can be used, and what kind of code it generates.
+Definition/Implementations -> Contains the code that expands the macro by generating Swift code. 
+
+
