@@ -1,0 +1,5 @@
+Macros 
+Use macros to generate code at compile time. 
+
+1. What is Macros?
+Macros transform your source code when you compile it, letting you avoid writing repetative 
