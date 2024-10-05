@@ -1,0 +1,40 @@
+Optional Chaining 
+Access members of an optional value without unwrapping 
+
+1. Explain optional chaining
+Optional chaining is a process for querying and calling properties, methods, and subscripts on an optional that might currently be nil. 
+If the optional contains a value, the property, method, or subscripts call succeds; if the optional is nil, the property, method and subscript call return nil. 
+
+2. Explain the difference between optional chaining and forced unwrapping. 
+You specify optional chaining by placing a question mark (?) after the optional value on which you wish to call a property, method or subscript if the optional is non-nil. 
+This is very simiallar to the forced unwrapping, that is placing ! mark at the end. 
+The main difference is that optional chaining fails gracefully when the optional is nil, where as forced unwrapping triggers a runtime error when the optional is nil.
+
+3. Is return type of optional chaning is also optional?
+Yes. return type of optional chaining is always optional, though it returns the non-nil value. 
+The result of an optional chaining call is of the same type as the expected return value, but wrapped in an optional. 
+A property that normally returns an Int will return an Int? when accessed through optional chaining.
+
+4. Usage of optional chanining 
+1. Safely access the value of the property, methods, subscript 
+2. Verify the existance of non-nil value
+3. Access a property on an optional value, and to check if that property access is successful. 
+4. You can use optional chaining to call a method on an optional value, and check whether that method call is successful. 
+5. Any attempt to set a property through optional chaining returns a value of type Void?, which enables you to compare against nil to see if the property was set successfully. 
+6. You can use optional chaining to try to retrieve and set a value from a subscript on an optional value, and to check whether that subscript call is successful. When you access a subscript on an optional value through optional chaining, 
+you place the question mark before the subscript’s brackets, not after.
+if let firstRoomName = john.residence?[0].name {
+    print("The first room name is \(firstRoomName).")
+} else {
+    print("Unable to retrieve the first room name.")
+}
+
+
+5. Explain rules of optional chaining 
+- If the type you are trying to retrieve isn’t optional, it will become optional because of the optional chaining.
+- If the type you are trying to retrieve is already optional, it will not become more optional because of the chaining.
+
+- If you try to retrieve an Int value through optional chaining, an Int? is always returned, no matter how many levels of chaining are used.
+- Similarly, if you try to retrieve an Int? value through optional chaining, an Int? is always returned, no matter how many levels of chaining are used.
+
+
