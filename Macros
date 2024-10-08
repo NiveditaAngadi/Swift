@@ -26,7 +26,12 @@ Freestanding macros -
 - they can perform an action at compile time. 
 
 4. Explain Attached macros. 
-Attached macros are called by mentioning @ before the name of the macro, and you write any arguments to the macro in parantheses after its name. 
+Attached macros are called by mentioning @ before the name of the macro, and 
+you write any arguments to the macro in parantheses after its name. 
+
+Attached macros modify the declaration that they’re attached to.
+They add code to that declaration, like defining a new method or adding conformance to a protocol.
+
 Without macro:
 struct SundaeToppings: OptionSet {
     let rawValue: Int
@@ -53,5 +58,12 @@ b. Easier to maintain than manually coded version.
 Macros declaration and definition are seperate. 
 Declaration -> contains its name, the parameters it takes, where it can be used, and what kind of code it generates.
 Definition/Implementations -> Contains the code that expands the macro by generating Swift code. 
+
+7. Explain Macro Declaration
+
+8. Explain Macro Expansion 
+When building Swift code that uses macros, the compiler calls the macros implementation and expand them. 
+AST - Abstract Syntax Tree 
+
 
 
