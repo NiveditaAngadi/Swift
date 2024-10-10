@@ -1,0 +1,12 @@
+Protocol 
+Define requirements that confirming types must implement. 
+
+1. What is protocol?
+A protocol defines a blue print of methods, properties, and other requirements that suit a particular task or piece of functionality. 
+A protocol can be adopted by a class, structure or enumeration to provide an actual implementation of those requirements. 
+Any type that satisfies the requirments of a protcol is said to conform to the protcol. 
+
+2. Can protcol be extended?
+Yes. You can extend a protcol to implement some of these requirements or to implement additional functionality that confirming types can take advantage of. 
+
+3. 
