@@ -1,3 +1,14 @@
 Error Handling 
 Respond to and recover from errors. 
 
+1. What is error handling?
+Error handling is the process of responding to and recovering from error conditions in your program. 
+
+Swift provides first-class support for throwing, catching, propogating, and manipulating recovarable errors at runtime. 
+Its important to to understandt when the operation fails, it's often useful to understand what caused the failure, so that you code 
+can respond accrodingly. 
+
+2. How errors are represented in Swift?
+In Swift, errors are represented by values of types that conform to the "Error" protocol. 
+
+
