@@ -1,0 +1,45 @@
+Extensions
+Add functionality to an existing type. 
+
+1. Explain extensions. 
+Extensions add new functionality to an existing class, structure, enumerations, or protocol type. 
+This includes the ability to extend types for which you don't have access to the original source code. 
+Extensions are similar to categories in Objective-C. Unlike Objective-C categories, Swift extensions don't have names. 
+
+Extensions in swift can, 
+1. Add computed instance properties and computed type properties. 
+2. Define instance methods and type methods. 
+3. Provide new initialisers.
+4. Define subscripts 
+5. Define and use new nested types. 
+6. Make an existing type conform to a protocol. 
+7. Can be used to extend an existing generic type. 
+
+2. Can extensions can add stored property?
+No. Extensions can not add new stored property. 
+Extensions can add new computed properties,  but they can't add stored properties, or add property observers to existing properties. 
+
+3. Define the initialisers in extensions. 
+Extensions can add new initialisers to existing types. This enables you to extend other types to accept your own custom types as initializer 
+parameters, or to provide additional initialization options that were not included as part of the type's original implementation. 
+
+4. Explain class initialisers in the extensions. 
+Extensions can add new convenience initializers to a class, but they can’t add new designated initializers or deinitializers to a class. 
+Designated initializers and deinitializers must always be provided by the original class implementation.
+
+5. Explain value type initailization in the extension. 
+If you use an extension to add an initialiser to a value type that provides default values all of its stored properties and doesn't define 
+any custom initialisers, you can call the default initialiser and memberwise initialiser for that value type from within your extension's initialisers.
+
+If you use an extension to add an initializer to a structure that was declared in another module, 
+the new initializer can’t access self until it calls an initializer from the defining module.
+
+If you provide a new initialiser with an extension, you are still responsible for making sure that each instance is fully initialised once the 
+initialiser completes. 
+
+6. Extension can define mutating instance methods 
+Instance methods added with an extension can also modify(or mutate)the instance itself. 
+Structure and enumeration methods that modify self or its properties must mark the instance method as mutating, 
+just like mutating methods from an original implementation.
+
+7. Extension can add new nested types to existing classes, structures, and enumerations. 
