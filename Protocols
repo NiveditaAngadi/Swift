@@ -9,4 +9,162 @@ Any type that satisfies the requirments of a protcol is said to conform to the p
 2. Can protcol be extended?
 Yes. You can extend a protcol to implement some of these requirements or to implement additional functionality that confirming types can take advantage of. 
 
-3. 
+3. Can we declare a property in the protocol? 
+Yes. You can declare property in the protocol. 
+1. Either it may be name or type property. 
+2. Either it may be gettable or (gettable and settable)
+3. It should n't be constant stored property or a read-only computed property. 
+4. Property requirements are always decalred as variable properties, prefixed with the var keyword. 
+5. Type property prefixed with the "static" or "class" for class variables.
+ Example:
+
+protocol FullyNamed {
+ var fullName: String { get } 
+}
+
+struct Person: FullyNamed {
+ var fullName: String 
+}
+
+let john = Person(fullName: "John Appleseed") 
+
+4. Example of Method requirements in Protocol 
+Method would be defined same as you define the instance or type methods in the structure or class, but without curly braces. 
+Type method defind as "static" or "class" prefix.
+
+Example
+protocol SomeProtocol {
+ static func someTypeMethod()
+}
+
+protocol RandomNumberGenerator {
+ func random() -> Double 
+}
+
+5. Can protocol define mutating methods?
+Yes. Protocol can define the mutating method where it has the permission to modify (or mutate) the instance it belongs to. 
+For instance methods on value types (that is, structures and enumerations) you place the mutating keyword before a method’s func keyword to indicate that the method is allowed to modify the instance it belongs to and 
+any properties of that instance.
+
+Protocol Togglable {
+ mutating func toggle() 
+}
+
+enum OnOffSwitch: Toggle {
+case off, on 
+
+mutating func toggle() {
+ switch self {
+ case .off: 
+    self = .on 
+ case .on: 
+   self = .off 
+ }
+}
+}
+
+6. Can protocol define initializers?
+Yes. Protocols can require specific initializers to be implemented by conforming types. 
+You write the initializers same as you write in structure or class. 
+You can implement a protocol initializer requirement on a conforming class as either a designated initializer or 
+a convenience initializer. In both cases, you must mark the initializer implementation with the ** required ** modifier. 
+If a subclass override superclass initializer, you write required override. 
+
+protcol SomeProtocol {
+init(someParameter: Int) 
+}
+
+class SomeClass: SomeProtocol {
+ required init(someParameter: Int) 
+}
+
+class SomeSubClass: SomeClass, SomeProtocol {
+ required override init(somePrameter: Int) {
+  }
+ }
+
+7. Can protcol define failable initializers?
+Yes. 
+
+8. Can protocol used as type. 
+Yes. The most common way to use a protocol as a type is to use a protocol as a generic constraint. 
+
+9. What is delegation?
+Delegation is a design pattern that enables a class or structure to hand off (or delegate) some of its responsibilities to an instance 
+of another type. 
+This design pattern is implemented by defining a protocol that encapsulates the delegated responsibilities, 
+such that a conforming type (known as a delegate) is guaranteed to provide the functionality that has been delegated. 
+
+The design pattern is implemented by using protocol that encapsulates the delegated responsibilities, such as confirming type (known as delegate)
+is guaranteed to provide the functionality that has been delegated. 
+Delegation can be used to respond to particular action, or to retrieve data from an external source without needing to know the underlying type of 
+the source. 
+
+10. Can protocols nested. 
+Yes. Protocols can be nested inside of type declarations like structures and classes, as long as the outer declaration isn’t generic. 
+
+11. How you define class-only protocol?
+Class-only protocol is marked by its inheritance from AnyObject. 
+
+12. How do you make sure prevention of strong reference cycle?
+By defining the delegate as weak. 
+
+13. What is synthesized implementation?
+Synthesized implementation means you don't have to write repetative boilerplate code to implement the protocol requirement yourself. 
+Equatable, Comparable and Hashable are synthesized protocol. 
+
+14. Can I use protocol in collection?
+Yes. You can use protocol as type in a collection. 
+
+15. What is protocol inheritance?
+You can inherit another protocol just as the class inheritance. 
+
+protcol InheritingProtocol: SomeProtocol, AnotherProtocol {
+
+}
+
+16. Explain class-only protocols. 
+You can limit protocol adoption to class type(not structure or enumertaions) by adding the "AnyObject" protocol to protocol's inheritance list. 
+
+protocol SomeClassOnlyProtocol: AnyObject, SomeInheritedProtocol {
+}
+
+17. What is Protocol Composition?
+It can be useful to require a type to confirm to multiple protocols at the same time. 
+You can combine multiple protocols into a single requirement with a protocol composition. 
+Protocol compositions behave as if you defined a temporary local protocol that has the combined requirements of all protocols 
+in the composition.
+Protocol compositions have the form SomeProtocol & AnotherProtocol. 
+You can list as many protocols as you need, separating them with ampersands (&). 
+
+18. How do you verify the protocol conformance?
+By using the "is" and "as" operator to check protocol conformance, and to cast to a specific protocol. 
+1. The is operator returns true if an instance conforms to a protocol and returns false if it doesn’t.
+2. The as? version of the downcast operator returns an optional value of the protocol’s type, and this value is nil if the instance doesn’t conform to that protocol.
+3. The as! version of the downcast operator forces the downcast to the protocol type and triggers a runtime error if the downcast doesn’t succeed.
+
+19. Define the optional protocol requirements.
+You can define the optional requirements for protocol. 
+These requirements don’t have to be implemented by types that conform to the protocol. 
+Optional requirements are prefixed by the optional modifier as part of the protocol’s definition. 
+Optional requirements are available so that you can write code that interoperates with Objective-C. 
+
+Both the protocol and the optional requirement must be marked with the @objc attribute. 
+Note that @objc protocols can be adopted only by classes, not by structures or enumerations.
+
+20. Explain protocol extension. 
+Protocol can be extended to provide method, initialiser, subscript, and computed property implementations to conforming types. 
+This allows you to define behavior on protocols themselves, rather than in each type's individual conformance or in global function. 
+By creating extension on protocol, all conforming types automatically gain this method implementation without any additional modification. 
+
+Protocol extension can add implementation to confirming types but can't make a protocol extend or inherit from another protcol.
+Protocol inheritance is always specified in the protcol declaration itself. 
+
+You can provide default implementation of any method or computed property in the extension of the protcol. If a confirming type provides the implemention for the 
+required method or computed property, that implementation will be used insted of one provided by the extension. 
+
+21. Can constraint be added to the protocol extension. 
+Yes. Constraint added to the protocol extension by the "where" clause of the generics. 
+
+extension Collection where Element: Equatable {
+}
