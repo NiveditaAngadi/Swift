@@ -45,6 +45,7 @@ You typically use open when specifying the public interface to a framework.
 - Allows code outside the module to subclass and override.
 
 2. Public:
+Can be used for structure, its usage guidelines as is Open access. 
 
 3. Package: Enables entities to be used within any source files from their defining package but not in any source file outside of that package.
 You typically use package access within an app or framework that’s structured into multiple modules.
@@ -59,5 +60,56 @@ fileprivate declared variable is accessible within the same file.
 6. Private: 
 Use restricts the use of an entity to the enclosing declaration, and to extensions of that declaration that are in the same file
 Private access is the lowest (most restrictive) access level.
+
+7. Access levels for single-target apps. 
+When you write a simple single-target app, the code in your app is typically 
+self-contained within the app and doesn’t need to be made available outside of the app’s module. 
+The default access level of internal already matches this requirement. 
+
+8. Access levels for frameworks. 
+When you develop a framework, mark the public-facing interface to that framework as open or public so that it can be viewed and accessed by other modules, such as an app that imports 
+the framework. 
+
+9. Access levels for Unit Test targets
+A unit test target can access any internal entity, if you mark the import declaration for product module with @testable attribute and compile that product module with testing enabled.
+
+10. Access levels of Tuple types. 
+The access level for a tuple type is the most restrictive access level of all types used in that tuple. For example, 
+if you compose a tuple from two different types, one with internal access and one with private access, 
+the access level for that compound tuple type will be private.
+
+11. Access levels for enumeration types. 
+The individual cases of an enumeration automatically receive the same access level as the enumeration they belong to. 
+You can’t specify a different access level for individual enumeration cases.
+The types used for any raw values or associated values in an enumeration definition must have an access level at least as high as the enumeration’s access level. 
+For example, you can’t use a private type as the raw-value type of an enumeration with an internal access level.
+
+12. Access levels of subclass
+You can also subclass any open class that’s defined in a different module. A subclass can’t have a higher access level than its superclass — for example, 
+you can’t write a public subclass of an internal superclass.
+
+13. Access levels of getter and setter. 
+Getters and setters for constants, variables, properties, and subscripts automatically receive the same access level as the constant, variable, property, or subscript they belong to.
+You can give a setter a lower access level than its corresponding getter, to restrict the read-write scope of that variable, property, or subscript. 
+You assign a lower access level by writing fileprivate(set), private(set), internal(set), or package(set) before the var or subscript introducer.
+
+14. Access level for initialisers 
+Cusstom initialiser can be assigned an access level less than or equal to the type that they initialise. 
+A required initializer must have the same access level as the class it belongs to. 
+
+15. What is the access level of default initialiser?
+A default initializer has the same access level as the type it initializes, unless that type is defined as public. 
+For a type that’s defined as public, the default initializer is considered internal.
+
+The default memberwise initializer for a structure type is considered private if any of the structure’s stored properties are private. Likewise,
+if any of the structure’s stored properties are file private, the initializer is file private. 
+Otherwise, the initializer has an access level of internal.
+
+16. Accesslevel for protocol
+If you want to assign an explicit access level to a protocol type, do so at the point that you define the protocol. 
+This enables you to create protocols that can only be adopted within a certain access context.
+
+If you define a new protocol that inherits from an existing protocol, the new protocol can have at most the same access level as the protocol it inherits from. 
+For example, you can’t write a public protocol that inherits from an internal protocol.
 
 
