@@ -9,6 +9,123 @@ Its important to to understandt when the operation fails, it's often useful to u
 can respond accrodingly. 
 
 2. How errors are represented in Swift?
-In Swift, errors are represented by values of types that conform to the "Error" protocol. 
+In Swift, errors are representede by values of types that conform to the "Error" protocol. 
+Its an empty protocol. Errors are listed by the enumeration. 
+
+3. How do you know that error has occured in the program. 
+Whenever error occured in the program, its indicated by throwing an error. 
+In swift by mentioning "throw" statement to throw an error. 
+
+enum VendingMachineError: Error {
+    case invalidSelection
+    case insufficientFunds(coinsNeeded: Int)
+    case outOfStock
+}
+
+throw VendingMachineError.insufficientFunds(coinsNeeded: 5)
+
+4. How do we handle the error in swift?
+ When an error is thrown, some surrounding piece of code must be responsible for handling the error. For example,  by correcting the problem, 
+trying an alternative approach, or informing the user of the failure. 
+
+There are four ways to handle errors in swift. 
+1. You can propogate the error from a function to the code that calls the function. 
+2. Handle error using do-catch statment. 
+3. Handle the error an an optional value 
+4. Assert that the error will not occur. 
+
+Its important to identify the places in your code that can throw errors. 
+To identify that places in your code, write try keyword - or try? or try! variations before piece of code that calls a function, method or
+initialiser that can throw an error. 
+
+5. How do you propogate the errors?
+To indicate that a function, method, or initialiser can throw an error, you write the "throws" keyword in the functions declaration after its parameter. 
+A function marked with throws is called a throwing function. 
+
+func canThrowErrors() throws -> String 
+func cannotThrowErrors() -> String 
+
+A throwing function propgates errors that are thrown inside of it to the scope from which it's called. 
+
+Only throwing functions can propagate errors. Any errors thrown inside a nonthrowing function must be handled inside the function.
+
+func vend(itemNamed name: String) throws {
+guard let item = inventory[name] else {
+ throw VendingMachineError.invalidSelection
+}
+}
+
+5. How do you call the propogating method in swift?
+Any method which calls the throwing function must either handle the errors - using do-catch statment, try?, try! - or continue to propogate them. 
+
+6. Can we write initialiser which can throw an error?
+Yes. throwing initializers can propogate errors in the same way as throwing functions. 
+
+7. Explain error handling using do-catch block
+You use a do-catch statment to handle errors by running a block of code.
+If an error is thrown by the code in the do clause, it’s matched against the catch clauses to determine which one of them can handle the error.
+
+do {
+ try <#expression#> 
+ <#statement#>
+} catch <#pattern 1#> {
+<#statment#>
+} catch <#pattern 2#> where <#condition#> {
+    <#statements#>
+} catch <#pattern 3#>, <#pattern 4#> where <#condition#> {
+    <#statements#>
+} catch {
+    <#statements#>
+}
+
+8. How do you convert errors to optional values?
+You use try? to handle an error by converting it to an optional value.
+If an error is thrown while evaluating the try? expression, the value of the expression is nil. 
+
+func someThrowingFunction() throws -> Int {
+    // ...
+}
+
+
+let x = try? someThrowingFunction()
+
+
+let y: Int?
+do {
+    y = try someThrowingFunction()
+} catch {
+    y = nil
+}
+
+Using try? lets you write concise error handling code when you want to handle all errors in the same way.
+func fetchData() -> Data? {
+    if let data = try? fetchDataFromDisk() { return data }
+    if let data = try? fetchDataFromServer() { return data }
+    return nil
+}
+
+9. How do you disable the error propogation?
+By using try!, cases such as you are sure that error won't occur at runtime. 
+On those occasions, you can write try! before the expression to disable error propagation and wrap the call in a runtime assertion that no error will be thrown. 
+If an error actually is thrown, you’ll get a runtime error.
+
+let photo = try! loadImage(atPath: "./Resources/John Appleseed.jpg")
+
+10. What is typed throws?
+You can specify the type of error a method/fucntion throws. 
+for example:
+func summarize(_ ratings: [Int]) throws(StaticError) {
+}
+
+11. Explain about the defer statement.
+You use a defer statement to execute a set of statements just before code execution leaves the current block of code. 
+This statement lets you do any necessary cleanup that should be performed regardless of how execution leaves the current block of code — whether it leaves because an error was thrown or because of a statement such as return or break
+
+A defer statement defers execution until the current scope is exited.
+This statement consists of the defer keyword and the statements to be executed later. 
+Deferred actions are executed in the reverse of the order that they’re written in your source code. That is, the code in the first defer statement executes last, 
+the code in the second defer statement executes second to last, and so on.
+The last defer statement in source code order executes first.
+
 
 
