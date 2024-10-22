@@ -7,3 +7,66 @@ Swift uses Automatic Reference Counting (ARC) to track and manage your app’s m
 Reference counting applies only to the classes. 
 Structures and enumerations are value types, not reference types, and aren’t stored and passed by reference.
 
+2. How ARC works?
+Whenever you create a new instance of a class, ARC allocates a chunk of memory to store information about that instance. This memory
+holds information about the type of the instance, together with the values of any stored properties associated with that instance. 
+When an instance is no longer needed, ARC frees up the memory used by that instance so that the memory can be used for other purpose instead. 
+This ensures that class instances don’t take up space in memory when they’re no longer needed.
+To make sure that instances don't disappear while they're still in use, ARC tracks how many properties, constants, and variables are currently 
+referring to each class instance. ARC will not deallocate an instance as long as at least one active reference to that instance still exists. 
+To make this possible, whenever you assign a class instance to a property, constant, or variable, that property, constant, 
+or variable makes a strong reference to the instance. The reference is called a “strong” reference because it keeps a firm hold on that instance, 
+and doesn’t allow it to be deallocated for as long as that strong reference remains.
+
+3. What is Strong Reference Cycle?
+If two class instances hold a strong reference to each other, such that each instance keeps the other alive. This is known as a Strong Refernce Cycle.
+
+4. How do you resolve a strong reference cycle?
+You resolve strong reference cycles by defining some of the relationships between classes as weak or unowned references 
+instead of strong refrences. 
+
+5. Explain how weak or unowned reference handles the memory leak?
+Weak and unowned references enable one instance in a refernce cycle to refer to the other instance without keeping a strong hold on it. 
+The instances can then refer to each other without creating a strong reference cycle. 
+
+6. When should use Weak reference?
+Use a weak reference when the other instance has a short lifetime - that is, when the other instance can be deallocated first. 
+Because a weak reference doesn’t keep a strong hold on the instance it refers to, 
+it’s possible for that instance to be deallocated while the weak reference is still referring to it. 
+Therefore, ARC automatically sets a weak reference to nil when the instance that it refers to is deallocated.
+
+class Person {
+    let name: String
+    init(name: String) { self.name = name }
+    var apartment: Apartment?
+    deinit { print("\(name) is being deinitialized") }
+}
+
+
+class Apartment {
+    let unit: String
+    init(unit: String) { self.unit = unit }
+    var tenant: Person?
+    deinit { print("Apartment \(unit) is being deinitialized") }
+}
+
+ it’s appropriate for an apartment to be able to have no tenant at some point in its lifetime, 
+and so a weak reference is an appropriate way to break the reference cycle in this case.
+
+7. Why weak reference is always variable?
+Weak references need to allow their value to be changed to nil at runtime, they’re always declared as variables, rather than constants, of an optional type.
+
+6. When should use Unowned reference?
+Like a weak reference, an unowned reference doesn’t keep a strong hold on the instance it refers to. Unlike a weak reference, 
+however, an unowned reference is used when the other instance has the same lifetime or a longer lifetime. 
+You indicate an unowned reference by placing the unowned keyword before a property or variable declaration.
+
+Unlike a weak reference, an unowned reference is expected to always have a value. 
+As a result, marking a value as unowned doesn’t make it optional, and ARC never sets an unowned reference’s value to nil.
+
+For example:
+Customer and Credit Card
+Customer may not have a credit card 
+But 
+Credit card will always be associated with a customer.
+A CreditCard instance never outlives the Customer that it refers to. 
