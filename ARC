@@ -70,3 +70,87 @@ Customer may not have a credit card
 But 
 Credit card will always be associated with a customer.
 A CreditCard instance never outlives the Customer that it refers to. 
+
+class Customer {
+    let name: String
+    var card: CreditCard?
+    init(name: String) {
+        self.name = name
+    }
+    deinit { print("\(name) is being deinitialized") }
+}
+
+
+class CreditCard {
+    let number: UInt64
+    unowned let customer: Customer
+    init(number: UInt64, customer: Customer) {
+        self.number = number
+        self.customer = customer
+    }
+    deinit { print("Card #\(number) is being deinitialized") }
+}
+
+The Customer and CreditCard example shows a situation where one property that’s allowed to be nil and another property that can’t be nil 
+have the potential to cause a strong reference cycle. This scenario is best resolved with an unowned reference.
+
+7. What is unsafe unowned reference?
+You indicate an unsafe unowned reference by writing unowned(unsafe). 
+If you try to access an unsafe unowned reference after the instance that it refers to is deallocated, 
+your program will try to access the memory location where the instance used to be, which is an unsafe operation.
+
+8. What is unowned optional reference?
+You can mark an optional reference to a class as unowned. In terms of the ARC ownership model, 
+an unowned optional reference and a weak reference can both be used in the same contexts.
+The difference is that when you use an unowned optional reference, 
+you’re responsible for making sure it always refers to a valid object or is set to nil.
+
+both properties should always have a value, and neither property should ever be nil once initialization is complete. In this scenario,
+it’s useful to combine an unowned property on one class with an implicitly unwrapped optional property on the other class.
+
+9. How strong reference cycles for closures created?
+A strong reference cycle can also occure if you assign a closure to a property of a class instance, and the body of that closure captures the 
+instance. This capture might occur because the closure’s body accesses a property of the instance, such as self.someProperty, or because the closure calls a method on the instance, such as self.someMethod(). 
+In either case, these accesses cause the closure to “capture” self, creating a strong reference cycle.
+This strong reference cycle occurs because closures, like classes, are reference types. When you assign a closure to a property, you are assigning a reference to that closure. 
+In essence, it’s the same problem as above — two strong references are keeping each other alive.
+you can create a strong reference cycle when using a closure that references self. 
+
+
+10. What is capture list in the Closure
+Swift provides a solution to resolve closure strong reference cycle that is closure capture list. 
+
+11. How do you resolve the strong reference cycles for closures
+You resolve a strong reference cycle between closure and a class instance by defining a capture list as part of the closure's definition. 
+A capture list defines the rules to use when capturing one or more reference types within the closure’s body.
+As with strong reference cycles between two class instances, you declare each captured reference to be a weak or unowned reference rather than a strong reference. 
+
+12. How do you define the capture list?
+Each item in a capture list is a pairing of the weak or unowned keyword with a reference to a class instance (such as self) or a variable initialized with some value (such as delegate = self.delegate). 
+These pairings are written within a pair of square braces, separated by commas.
+
+Place the capture list before a closure’s parameter list and return type if they’re provided:
+lazy var someClosure = {
+        [unowned self, weak delegate = self.delegate]
+        (index: Int, stringToProcess: String) -> String in
+    // closure body goes here
+}
+
+If a closure doesn’t specify a parameter list or return type because they can be inferred from context, 
+place the capture list at the very start of the closure, followed by the in keyword:
+lazy var someClosure = {
+        [unowned self, weak delegate = self.delegate] in
+    // closure body goes here
+}
+
+13. When should be define Unowned reference in closure?
+Define a capture in a closure as an unowned reference when the closure and the instance it captures will always refer to each other, and will always be deallocated at the same time.
+If the captured reference will never become nil, it should always be captured as an unowned reference, rather than a weak reference.
+
+14. When should be define weak reference in closure?
+Define a capture as a weak reference when the captured reference may become nil at some point in the future. 
+Weak references are always of an optional type, and automatically become nil when the instance they reference is deallocated.
+This enables you to check for their existence within the closure’s body.
+
+15. 
+
