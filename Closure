@@ -126,8 +126,6 @@ func collectCustomerProviders(_ customerProvider: @autoclosure @escaping () -> S
 
 18. How you call closure in mutating function of structure/enumerations?
 
-
-
 16. Write map function in closure 
 
 17. Write sorted(by: ) in closure
