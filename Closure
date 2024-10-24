@@ -136,5 +136,14 @@ func collectCustomerProviders(_ customerProvider: @autoclosure @escaping () -> S
 
 20. Write reduce in closure
 
+21. Describe the closure in swift 
+
+22. How do you handle escaping and non-escaping closures in Swift?
+
+23. What are higher order functions in swift? Give an example. 
+
+24. Explain how you can use map, filter, and reduce functions in Swift?
+
+
 
 
