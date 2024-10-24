@@ -152,5 +152,13 @@ Define a capture as a weak reference when the captured reference may become nil 
 Weak references are always of an optional type, and automatically become nil when the instance they reference is deallocated.
 This enables you to check for their existence within the closure’s body.
 
-15. 
+15. Discuss how ARC works in Swift?
+
+16. How you prevent retain cycle in Swift when using closure.
+
+17. Explain the concept of weak and unowned references in swift
+
+18. Given an example where you would use unowned instead of weak. 
+
+
 
