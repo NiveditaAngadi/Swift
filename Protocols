@@ -168,3 +168,18 @@ Yes. Constraint added to the protocol extension by the "where" clause of the gen
 
 extension Collection where Element: Equatable {
 }
+
+22. Define a protocol in swift and explain common use cases. 
+
+23. How do you adopt a protocol in swift?
+
+24. Explain how extension are used in swift?
+
+25. What are protcol extensions and how do they differ from traditional extensions?
+
+26. How can protocols be used to achieve polymorphism in Swift?
+
+27. Discuss the concept of protocol composition in Swift?
+
+28. What are associated types in Swift Protcol?
+
