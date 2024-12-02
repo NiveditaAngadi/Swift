@@ -1,0 +1,136 @@
+https://forums.swift.org/t/improving-the-ui-of-generics/22814
+
+
+Hide implementation details about a value's type. 
+
+1. What are the two ways provided by Swift to hide a value's type?
+ - Opaque types
+ - Box protocol types 
+
+2. Why hiding type of value is required?
+Hiding type information is useful at boundaries between a module and code that calls into module, because the underlying type of the return value can remain private. 
+
+3. What is Opaque type?
+A function or method that returns an opaque type hides its return value's type information. Instead of providing a concrete type as the function's return type, the return value 
+is described in terms of the protocol it supports. 
+Opaque type preserves the type identity - the compiler has access to the type information, but clients of the module don't. 
+
+Opaque types allow you to describe the expected return type without defining a concrete type. 
+A common place where we use opaque types today is inside the body of a SwiftUI view:
+var body: some View { ... }
+
+At first, it looks like we’re returning a protocol type. 
+Though, the some keyword is crucial here as it allows the compiler to access the actual type information and perform optimizations. 
+For example, the compiler can see the following return types:
+var body: VStack { ... }
+
+// or:
+
+var body: Text { ... }
+
+The entire view hierarchy is opaque, allowing the compiler to know the exact size of the returned view body. 
+The compiler can optimize the code, and fewer heap allocations are needed.
+Without diving into details, you could say we’re giving the compiler more information than just stating we’re expecting a View protocol to be returned by appending the some keyword.
+
+4. Explain the error in this example
+Error: Function declares an opaque return type ‘some View’, but the return statements in its body do not have matching underlying types.
+
+func makeFooterView(isPro: Bool) -> some View {
+    if isPro {
+        return Text("Hi there, PRO!") // Return type is Text        
+    } else {
+        return VStack { // Return type is VStack<TupleView<(Text, Button<Text>)>>
+            Text("How about becoming PRO?")
+            Button("Become PRO", action: {
+                // ..
+            })
+        }
+    }
+}
+
+As you can see, we’re returning two types of views: a VStack when the isPro boolean returns true, otherwise a Text view.
+
+Fix:
+func makeFooterView(isPro: Bool) -> some View {
+    return VStack {
+        if isPro {
+            Text("Hi there, PRO!")
+        } else {
+            Text("How about becoming PRO?")
+            Button("Become PRO", action: {
+                // ..
+            })
+        }
+    }
+}
+
+@ViewBuilder
+func makeFooterView(isPro: Bool) -> some View {
+    if isPro {
+        Text("Hi there, PRO!")
+    } else {
+        VStack {
+            Text("How about becoming PRO?")
+            Button("Become PRO", action: {
+                // ..
+            })
+        }
+    }
+}
+
+Here @ViewBuilder is the resultBuilder. 
+
+5. Benefits of Opaque type?
+Opaque types in Swift help you to simplify your code and improve readability. 
+Swift 5.7 introduced many improvements making it possible to benefit from the some keyword in more places. 
+Using primary associated types and opaque type constraints, we can create powerful APIs. 
+The compiler can optimize the code while we keep the ability to hide concrete types.
+
+Helps to reduce complexity in our code. 
+
+6. Example for implementation of Opaque type. 
+func getRandomNumber() -> Int {
+Int.random(in: 1...6)
+}
+
+func getRandomBool() -> Bool {
+Bool.random()
+}
+
+Int and Bool - adopts "Equatable" protocol. 
+
+func getRandomNumber() -> some Equatable {
+Int.random(in: 1...6)
+}
+
+func getRandomBool() -> some Equatable {
+Bool.random()
+}
+
+Vehicles -> car, SUV, Van etc based on the requirement, we want some kind of Vehicle based on the requirement such as "size", "capacity", "fuel capacity"
+Opaque type basically hiding the return type information, but compiler knows what exactly the type information  of the computation - that it returns. 
+
+7. What is "some" keyword in Swift?
+The "some" keyword in Swift declares opaque types,  and Swift 5.1 introduced it with support for opaque result types. 
+"some" is get only property
+
+Wrong:
+Error:
+Cannot assign to value: 'someEquatable' is a get-only property
+Cannot assign value of type 'Int' to type 'some Equatable'
+
+var someEquatable: some Equatable {
+    someEquatable = 2
+}
+
+Correct: 
+var someEquatable: some Equatable {
+    return 2
+}
+
+8. What is boxed protocol?
+A boxed protocol type can store an instance of any type that conforms to the given protocol. Boxed protocol types don't preserve type identity - the value's specific 
+type isn't known until runtime, and it can change over time as different values are stored. 
+
+
+
