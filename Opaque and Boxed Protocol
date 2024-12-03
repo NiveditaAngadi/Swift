@@ -20,7 +20,7 @@ A common place where we use opaque types today is inside the body of a SwiftUI v
 var body: some View { ... }
 
 At first, it looks like we’re returning a protocol type. 
-Though, the some keyword is crucial here as it allows the compiler to access the actual type information and perform optimizations. 
+Though, the "some" keyword is crucial here as it allows the compiler to access the actual type information and perform optimizations. 
 For example, the compiler can see the following return types:
 var body: VStack { ... }
 
@@ -30,7 +30,7 @@ var body: Text { ... }
 
 The entire view hierarchy is opaque, allowing the compiler to know the exact size of the returned view body. 
 The compiler can optimize the code, and fewer heap allocations are needed.
-Without diving into details, you could say we’re giving the compiler more information than just stating we’re expecting a View protocol to be returned by appending the some keyword.
+Without diving into details, you could say we’re giving the compiler more information than just stating we’re expecting a View protocol to be returned by appending the "some" keyword.
 
 4. Explain the error in this example
 Error: Function declares an opaque return type ‘some View’, but the return statements in its body do not have matching underlying types.
@@ -131,6 +131,16 @@ var someEquatable: some Equatable {
 8. What is boxed protocol?
 A boxed protocol type can store an instance of any type that conforms to the given protocol. Boxed protocol types don't preserve type identity - the value's specific 
 type isn't known until runtime, and it can change over time as different values are stored. 
+
+Boxed protocol type also sometimes called "Existential type" 
+
+What is Existential Type?
+A new data type that is able to hold any value of any type that conforms to the protocol. 
+
+How existential type is differ from the Opaque type?
+Existential types are different from Opaque types that use the "some" keyword, e.g. some View, which must always represent one specific type that conforms to whatever constraints you 
+specify. 
+
 
 
 
