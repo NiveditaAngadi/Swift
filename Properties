@@ -260,6 +260,10 @@ Code reuse and customizability, and enables powerful new ways to implement prope
 One of the major benefits of property wrappers is that they enable us to add logic and behaviors to properties in a way that doesn’t impact our call sites at all — 
 as values are read and written the exact same way regardless of whether a property is wrapped or not.
 
+1. Data validation.
+2. Automatically applying transformations. 
+3. Centralizing property logic.
+
 25. Drawback of property wrapper?
  On the other hand, the risk is that we’ll end up hiding too much functionality behind what might be a quite non-obvious abstraction.
 
@@ -460,7 +464,67 @@ class SomeClass {
 print(SomeClass.computedTypeProperty)
 // Prints "27"
 
+39. How does lazy property differ from a regular stored property?
+1. Initializing timing
+  - Regular stored properties are initialised when the instance is created 
+  - Lazy properties are initialized only when accessed for the first time. 
+2. Memory Usage 
+ - A lazy property saves memory if the property is computationally expensive or not always used 
+3. Declaration 
+ - lazy properties must be declared as var because their value may change after initialization. 
 
+40. Can a computed property have property observers (willSet and didSet)? Why or why not?
+No, computed properties cannot have property observers because their value is not stored directly. 
+Instead, you can observe changes by overriding the computed property’s getter or setter.
+
+struct Rectangle {
+    var width: Double = 0.0
+    var height: Double = 0.0
+    var area: Double {
+        get {
+            return width * height
+        }
+        set {
+            width = sqrt(newValue) // Example logic
+            height = sqrt(newValue)
+            print("Area updated, new dimensions are \(width) x \(height)")
+        }
+    }
+}
+
+var rect = Rectangle()
+rect.area = 25.0 // Triggers the setter
+
+41. How do property attributes like @Published and @State differ?
+@Published:
+	•	Used in combination with ObservableObject for binding data in a SwiftUI environment.
+	•	Triggers updates when the value changes.
+
+class Model: ObservableObject {
+    @Published var data: String = "Hello"
+}
+
+@State:
+	•	Used for local state in SwiftUI views. Does not trigger updates to external views or objects.
+
+struct ContentView: View {
+    @State private var counter = 0
+    var body: some View {
+        Button("Tap Me") {
+            counter += 1
+        }
+    }
+}
+
+42. What are the default values for properties in Swift?
+Properties must be initialized during declaration or in the initializer. However:
+	•	Optional properties default to nil.
+	•	Static properties can have default values.
+
+struct User {
+    var name: String = "Guest" // Default value
+    var age: Int? // Defaults to nil
+}
 
 Refernce:
 https://www.swiftbysundell.com/articles/property-wrappers-in-swift/
