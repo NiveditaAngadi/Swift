@@ -11,9 +11,15 @@ Hide implementation details about a value's type.
 Hiding type information is useful at boundaries between a module and code that calls into module, because the underlying type of the return value can remain private. 
 
 3. What is Opaque type?
+An abstract type that represents a placeholder for a specific concrete type is called an opaque type.
+
+The specific concrete type that is substituted in is called the underlying type. 
+
 A function or method that returns an opaque type hides its return value's type information. Instead of providing a concrete type as the function's return type, the return value 
 is described in terms of the protocol it supports. 
 Opaque type preserves the type identity - the compiler has access to the type information, but clients of the module don't. 
+
+Opaque types can be used for both inputs and outputs, so they can be declared in parameter position or in result position.
 
 Opaque types allow you to describe the expected return type without defining a concrete type. 
 A common place where we use opaque types today is inside the body of a SwiftUI view:
@@ -113,7 +119,7 @@ Opaque type basically hiding the return type information, but compiler knows wha
 7. What is "some" keyword in Swift?
 The "some" keyword in Swift declares opaque types,  and Swift 5.1 introduced it with support for opaque result types. 
 "some" is get only property
-
+1. 
 Wrong:
 Error:
 Cannot assign to value: 'someEquatable' is a get-only property
@@ -128,18 +134,74 @@ var someEquatable: some Equatable {
     return 2
 }
 
+2. 
+func feed(_ animal: some Animal) 
+Writing "some Animal" is more straightforward, because it reduces syntactic noise, 
+and it includes the semantic information about the animal parameter right in the parameter declaration.
+
+The "some" in "some Animal" indicates that there is specific type that you're working with. 
+The "some" keyword is always followed by a conformance requirement. In this case, the specific type must conform to Animal protocol, which will allow 
+us to use requirements from Animal protocol on the parameter value.
+
+The "some" keyword can be used in parameter and result types.
+
 8. What is boxed protocol?
-A boxed protocol type can store an instance of any type that conforms to the given protocol. Boxed protocol types don't preserve type identity - the value's specific 
+A boxed protocol type can store an instance of "any" type that conforms to the given protocol. Boxed protocol types don't preserve type identity - the value's specific 
 type isn't known until runtime, and it can change over time as different values are stored. 
 
 Boxed protocol type also sometimes called "Existential type" 
 
-What is Existential Type?
+9. What is Existential Type?
 A new data type that is able to hold any value of any type that conforms to the protocol. 
 
 How existential type is differ from the Opaque type?
 Existential types are different from Opaque types that use the "some" keyword, e.g. some View, which must always represent one specific type that conforms to whatever constraints you 
 specify. 
+
+10. What's the difference between some and any keyword?
+The requirement here is to store different type of animals 
+If you declare function as below, function expects the homogenous (specific animal type) elements. Specific underlying type is fixed, that can not be vary. 
+func feedAll(_ animals: [some Animal])  
+This will not serve our purpose. 
+
+To achieve this, we can write "any Animal" arbitrary type of Animal. 
+The "any" keyword indicates that this type can store any arbitrary type of animal, and the underlying type of animal can vary at runtime. 
+
+"any Animal" -> is a single static type that has capability to store any concrete animal type dynamically, which allows us to use subtype polymorphism with value types. 
+
+some:
+With "some", the underlying type is fixed. 
+This allows you to rely on type relationships to the underlying type in your generic code, so you'll have full access to the API 
+and associated types on the protocol you're working with.
+Guarntees type relationships
+
+any:
+Use "any" when you need to store arbitrary concrete types.
+Provides the Erases type relationship - "any" provides type erasure, which allows you represent heterogeneous collections, represent the absence of an underlying type, using optionals, 
+and make the abstraction an implementation detail.
+
+11. Explain the memory representation of any type. 
+any Animal is a single static type that has the capability to store any concrete animal type dynamically, which allows us to use subtype polymorphism with value types.
+To allow for this flexibile storage, that any Animal type has a special representation in memory. You can think of this representation like box. Sometimes value is small 
+enough to fit inside the box directly. 
+And other values are too large for the box, so the value has to be allocated elsewhere, and the box stores the pointer to that value. 
+The static type any Animal that can dynamically store any concrete animal type formally called an existential type. 
+and the strategy of using the same representation for different concrete types is called "type erasure". The concrete type is said to be erased at compile time, and the concrete 
+type is only known at runtime. 
+These two instances of the existential type any Animal have the same static type, but different dynamic types.
+Type erasure eliminates the type-level distinction between different animal values, which allows us to use values with different dynamic types interchangeably as the same static type.
+We can use type erasure to write a heterogeneous array of value types, which is exactly what we want for the feedAll method.
+So we'll use an array of any Animal as the parameter type.
+
+12. What is Unboxing?
+"any" type is differ from "some" type, but the compiler can convert an instance of "any" to "some" by unboxing the underlying value and passing it directly to the "some" parameter. 
+The capability of unboxing arguments is new in Swift 5.7. 
+You can think of unboxing as the compiler opening the box and taking out the value stored inside.
+
+13. What Swift default recommendation while considering "some" and "any"
+In general, write "some" by default, and change "some" to "any" when you know you need to store arbitrary values.
+With this approach, you'll only pay the cost of type erasure and its semantic limitations when you need the storage flexibility it provides.
+
 
 
 
