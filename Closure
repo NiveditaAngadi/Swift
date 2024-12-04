@@ -156,28 +156,71 @@ counter.increment(by: 5, withAction: {
 // Count updated!
 
 16. Write map function in closure 
+var nums = [1,2,3,4,5]
+var result = nums.map { $0 * 2 }
+extension Collection {
+    func myMap1<T>(completion: (Element) -> T) -> [T] {
+        var result = [T]()
+        for (_, n) in nums.enumerated() {
+            result.append(completion(n as! Self.Element))
+        }
+         return result
+    }
+}
+
+var result1 = nums.myMap1 { "\($0 * 2)" }
+
+print(result1)
+"["2", "4", "6", "8", "10"]\n"
+
+17. Write an incrementer function which increments by certain number. 
+func makeIncrementor(forIncrement: Int) -> (() -> Int) {
+    var runningTotal = 0
+    
+    func incrementer() -> Int  {
+        runningTotal += forIncrement
+        return runningTotal
+    }
+    
+    return incrementer
+}
+
+let incrementBy5 = makeIncrementor(forIncrement: 5)
+incrementBy5()
+incrementBy5()
+incrementBy5()
+incrementBy5()
+5
+10
+15
+20
+
+18. Write a clsoure to handle the response asynchronously. 
+func fetchUserDat
+
+18. Write sorted(by: ) in closure
 
 
-17. Write sorted(by: ) in closure
 
-18. Write filter in closure 
 
-19. Write compactMap in closure 
+19. Write filter in closure 
 
-20. Write reduce in closure
+20. Write compactMap in closure 
 
-21. Describe the closure in swift 
+21. Write reduce in closure
 
-22. How do you handle escaping and non-escaping closures in Swift?
+22. Describe the closure in swift 
+
+23. How do you handle escaping and non-escaping closures in Swift?
 Swift closures can be classified into two types: escaping and non-escaping. 
 Escaping closures are those that outlive the function they are defined in, 
 while non-escaping closures are those that are used within the function and are deallocated when the function returns.
 
 One way that a closure can escape is by being stored in a variable that’s defined outside the function.
 
-23. What are higher order functions in swift? Give an example. 
+25. What are higher order functions in swift? Give an example. 
 
-24. Explain how you can use map, filter, and reduce functions in Swift?
+26. Explain how you can use map, filter, and reduce functions in Swift?
 
 
 
