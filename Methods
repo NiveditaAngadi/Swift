@@ -31,14 +31,17 @@ Function parameters can have both a name (for use within the function’s body) 
 Every instance of a type has an implicit property called self, which is exactly equivalent to the instance itself.
 
 6. How do you modify value types from within instance methods?
-Structures and enumerations are value types. By default, the properties of a value type can’t be modified from within its instance methods.
-However, if you need to modify the properties of your structure or enumeration within a particular method, you can opt in to mutating behavior for that method
-The method can then mutate (that is, change) its properties from within the method, and any changes that it makes are written back to the original 
+Structures and enumerations are value types. 
+By default, the properties of a value type can’t be modified from within its instance methods.
+However, if you need to modify the properties of your structure or enumeration within a particular method, 
+you can opt in to mutating behavior for that method.
+The method can then mutate (that is, change) its properties from within the method, 
+and any changes that it makes are written back to the original 
 structure when the method ends. 
 The method can also assign a completely new instance to its implicit self property, and this new instance will replace the existing one when the method ends.
-You can opt in to this behavior by placing the mutating keyword before the func keyword for that method.
+You can opt in to this behavior by placing the "mutating" keyword before the func keyword for that method.
 
-The mutating keyword is added to its definition to enable it to modify its properties.
+The "mutating" keyword is added to its definition to enable it to modify its properties.
 
 struct Point {
     var x = 0.0, y = 0.0
@@ -71,14 +74,24 @@ struct Point {
 
 9. What is type method?
 Method that is called on type itself.
-You indicate type methods by writing the static keyword before the method’s func keyword. 
-Classes can use the class keyword instead, to allow subclasses to override the superclass’s implementation of that method.
+You indicate type methods by writing the "static" keyword before the method’s func keyword. 
+Classes can use the "class" keyword instead, to allow subclasses to override the superclass’s implementation of that method.
 Within the body of a type method, the implicit self property refers to the type itself, rather than an instance of that type. 
 A type method can call another type method with the other method’s name, without needing to prefix it with the type name.
 Similarly, type methods on structures and enumerations can access type properties by using the type property’s name without a type name prefix.
 
+class SomeClass {
+ class func someTypeMethod() {
+  }
+}
+
+SomeClass.someTypeMethod()
+
 10. Difference between Objective-C and Swift type method.
 In Objective-C, you can define type-level methods only for Objective-C classes. 
-In Swift, you can define type-level methods for all classes, structures, and enumerations. Each type method is explicitly scoped to the type it supports.
+In Swift, you can define type-level methods for all classes, structures, and enumerations. 
+Each type method is explicitly scoped to the type it supports.
+
+
 
 
