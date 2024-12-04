@@ -208,4 +208,75 @@ Define functions inside the bodies of other functions.
 Nested functions are hidden from the outside world by default, but can still be called and used by their enclosing function. 
 An enclosing function can also return one of its nested functions to allow the nested function to be used in another scope.
 
+30. What is the difference between func and a closure in Swift?
+	•	A function (func) is a named reusable block of code that can accept input (parameters) and return an output.
+	•	A closure is an unnamed block of code that can also accept input and return output but is defined inline and can capture values from its surrounding context.
+// Function
+func greet(name: String) -> String {
+    return "Hello, \(name)"
+}
+
+// Closure
+let greetClosure: (String) -> String = { name in
+    return "Hello, \(name)"
+}
+
+print(greet(name: "Alice"))        // Output: Hello, Alice
+print(greetClosure("Alice"))       // Output: Hello, Alice
+
+Key Difference: Functions have a defined name and are easier to reuse, while closures are often used as inline expressions (e.g., as parameters to higher-order functions).
+
+31. How do you define a function with default parameter values in Swift?
+You can define default parameter values by assigning them in the function definition. Default values allow the caller to omit arguments.
+
+func greet(name: String = "Guest") {
+    print("Hello, \(name)")
+}
+
+greet()                 // Output: Hello, Guest
+greet(name: "Alice")    // Output: Hello, Alice
+
+32. Give example of in-out parameter
+func doubleValue(value: inout Int) {
+    value *= 2
+}
+
+var number = 5
+doubleValue(value: &number)
+print(number)    // Output: 10
+
+33. How does Swift handle functions as first-class citizens?
+In Swift, functions are first-class citizens, which means:
+	1.	Functions can be assigned to variables or constants.
+	2.	Functions can be passed as arguments to other functions.
+	3.	Functions can be returned from other functions.
+
+func add(a: Int, b: Int) -> Int {
+    return a + b
+}
+
+// Assigning a function to a variable
+let operation: (Int, Int) -> Int = add
+print(operation(3, 4)) // Output: 7
+
+// Passing a function as an argument
+func performOperation(_ operation: (Int, Int) -> Int, _ x: Int, _ y: Int) -> Int {
+    return operation(x, y)
+}
+print(performOperation(add, 3, 4)) // Output: 7
+
+34. Explain function currying and provide an example.
+Function currying is a technique where a function is transformed into a sequence of functions, each accepting a single parameter.
+	•	Currying is useful for partial application of functions.
+	•	It improves code readability and reuse in functional programming.
+
+func curriedAdd(_ a: Int) -> (Int) -> Int {
+    return { b in
+        return a + b
+    }
+}
+
+let addFive = curriedAdd(5)
+print(addFive(3)) // Output: 8
+
 
