@@ -16,7 +16,7 @@ Closure can take one of the three forms.
   3. Closure expressions are unnamed closures written in a lightweight syntax that can capture values from their surrounding context. 
 
 4. Various optimazations for closures. 
-  1. Inferring parameter and return vlaue types from context.
+  1. Inferring parameter and return value types from context.
   2. Implicit return from single-expression closures. 
   3. Short-hand argument names 
   4. Trailing closure syntax
@@ -32,7 +32,8 @@ Closure can take one of the three forms.
     }
 
 7. What is trailing closures? 
-If you need to pass a closure expression to a function as the function’s final argument and the closure expression is long, it can be useful to write it as a trailing closure instead
+If you need to pass a closure expression to a function as the function’s final argument 
+and the closure expression is long, it can be useful to write it as a trailing closure instead
 
 func someFunctionThatTakesAClosure(closure: () -> Void) {
     // function body goes here
@@ -48,9 +49,17 @@ someFunctionThatTakesAClosure() {
     // trailing closure's body goes here
 }
 
+8. Can we write ( and ) when closure is only parameter in a function?
+If a closure expression is provided as the function’s or method’s only argument 
+and you provide that expression as a trailing closure, you don’t need to write a pair of parentheses () after the function or method’s name when you call the function
+reversedNames = names.sorted() { $0 > $1 }
+
+reversedNames = names.sorted { $0 > $1 }
+
 8. Explain the capturing concept of closure
-A closure can capture constants and variables from the surrounding context in which it's defined. The closure can then refer to and modify the values of those constants and variabels 
-from within its body, even if the original scope that defined constants and variables no longer exists. 
+A closure can capture constants and variables from the surrounding context in which it's defined. 
+The closure can then refer to and modify the values of those constants and variabels from within its body, 
+even if the original scope that defined constants and variables no longer exists. 
 
 9. Closure is reference or value type?
 Closure is reference type. Functions and closures are reference types.
@@ -97,9 +106,10 @@ printTest2(print("Hello"))
 
 The @autoclosure attribute is used inside Swift wherever code needs to be passed in and executed only if conditions are right.
 
-
 12. Why should use autoclosure?
 In order to delay the execution of the function. 
+An autoclosure lets you delay evaluation, because the code inside isn’t run until you call the closure. 
+Delaying evaluation is useful for code that has side effects or is computationally expensive, because it lets you control when that code is evaluated.
 
 13. Parameters in closure can contain in-out parameters?
 Yes. But in-out parameters should n't have default values. 
@@ -125,8 +135,28 @@ func collectCustomerProviders(_ customerProvider: @autoclosure @escaping () -> S
 }
 
 18. How you call closure in mutating function of structure/enumerations?
+To call a closure within a mutating function of a struct or enum in Swift, 
+you simply pass the closure as an argument to the mutating function, making sure to use the self keyword within the closure to access 
+and modify the properties of the struct or enum instance if needed; no special syntax is required beyond the standard closure declaration and usage.
+
+struct Counter {
+    var count: Int = 0
+
+    mutating func increment(by amount: Int, withAction: () -> Void) {
+        self.count += amount
+        withAction() // Call the closure after incrementing
+    }
+}
+
+var counter = Counter()
+counter.increment(by: 5, withAction: { 
+    print("Count updated!") 
+}) 
+// Output: 
+// Count updated!
 
 16. Write map function in closure 
+
 
 17. Write sorted(by: ) in closure
 
@@ -139,6 +169,11 @@ func collectCustomerProviders(_ customerProvider: @autoclosure @escaping () -> S
 21. Describe the closure in swift 
 
 22. How do you handle escaping and non-escaping closures in Swift?
+Swift closures can be classified into two types: escaping and non-escaping. 
+Escaping closures are those that outlive the function they are defined in, 
+while non-escaping closures are those that are used within the function and are deallocated when the function returns.
+
+One way that a closure can escape is by being stored in a variable that’s defined outside the function.
 
 23. What are higher order functions in swift? Give an example. 
 
