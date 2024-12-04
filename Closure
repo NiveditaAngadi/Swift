@@ -196,7 +196,25 @@ incrementBy5()
 20
 
 18. Write a clsoure to handle the response asynchronously. 
-func fetchUserDat
+func fetchUserData(completion: @escaping (Result<[String], Error>) -> Void) {
+    DispatchQueue.global().async {
+        //simulate the delay
+        sleep(2)
+        
+        // simulate the output
+        let users = ["Alice", "Bob", "Curly"]
+        completion(.success(users))
+    }
+}
+
+fetchUserData { result in
+    switch result {
+    case .success(let users):
+        print("Fetch users: \(users)")
+    case .failure(let error):
+        print("Failed to fetch users: \(error)")
+    }
+}
 
 18. Write sorted(by: ) in closure
 
