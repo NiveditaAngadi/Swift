@@ -1,18 +1,60 @@
 Macros 
 Use macros to generate code at compile time. 
+Swift Macros are introduced in the Swift 5.9 version. 
+Swift macros are like smart tools that write code for you to make development faster, cleaner, and less error-prone!
 
 1. What is Macros?
 Macros transform your source code when you compile it, letting you avoid writing repetative code by hand. During compilation, swift expands
 any macros in your code before building your code as usaul. 
 
-2. Explain types of Macros 
-a. Freestanding macros -> Appear on their own, without being attached to a declaration. 
-b. Attached macros -> Modify the declaration that they're attached to. 
+Macros allow developers to write reusable pieces of code that get expanded and inserted at compile time. Think of them as a way to automate repetitive coding 
+tasks, improve code readability, and reduce boilerplate by writing code that generates the code. 
+
+2. What do macros do?
+	•	A macro transforms input code (like a function or property) into generated code that is automatically inserted during compilation.
+	•	They are executed at compile time, so the code they generate becomes part of your program before it even runs.
+
+3. Explain macro with example.
+Suppose you often log property changes for debugging. Instead of writing the same logging code repeatedly, you can use a macro.
+@Observable
+struct Counter {
+    var value: Int
+}
+Here, the @Observable macro automatically generates code to log changes whenever the value property is modified. 
+Behind the scenes, it expands into something like this:
+struct Counter {
+    var value: Int {
+        didSet {
+            print("Property value changed from \(oldValue) to \(value)")
+        }
+    }
+}
+You didn’t have to write the didSet code yourself—the macro did it for you!
+
+4. Why are Macros better than the manual code?
+	1.	Reduce Boilerplate: Avoid repetitive tasks like writing getter/setter logic, debug print statements, etc.
+	2.	Improve Readability: Keep your code concise and focused on what matters.
+	3.	Maintain Consistency: Generated code ensures that the logic is the same everywhere it’s used.
+
+5. How are Macros useful?
+ - Simplify repetative code patterns 
+ - Automate tasks like adding logging, creating custom debugging tools, or implementing repetative behaviours. 
+ - Ensure consistency across codebase. 
+
+4. Explain types of Macros 
+  a. Freestanding macros -> Appear on their own, without being attached to a declaration. 
+  b. Attached macros -> Modify the declaration that they're attached to. 
 
 You call attached and freestanding macros slightly differently, but they both follow the same model for macro expansion, you implement them both
 using the same approach. 
 
-3. Explain free standing macros.
+macro DebugLog<T>(_ value: T) -> Void {
+    print("Value: \(value)")
+}
+
+DebugLog("Hello, macros!")
+
+5. Explain free standing macros.
 Freestanding macros called by mentioning # before its name, you write any arguments to the macro in parantheses after its name. 
 func myFunction() {
  print("Currently running \(#function)")
@@ -32,6 +74,10 @@ you write any arguments to the macro in parantheses after its name.
 Attached macros modify the declaration that they’re attached to.
 They add code to that declaration, like defining a new method or adding conformance to a protocol.
 
+Attached macros in Swift are used to modify or enhance declarations, 
+such as structs, classes, or functions, by attaching the macro using an @ symbol. 
+These macros expand into additional code or logic that gets generated at compile time.
+
 Without macro:
 struct SundaeToppings: OptionSet {
     let rawValue: Int
@@ -50,6 +96,22 @@ struct SundaeToppings {
     }
 }
 
+@Codable
+struct User {
+    var id: Int
+    var name: String
+}
+
+struct User: Codable {
+    var id: Int
+    var name: String
+}
+
+Key Benefits of Attached Macros
+	1.	Code Generation: Automatically add boilerplate code like property observers, protocol conformance, or additional methods.
+	2.	Improved Readability: Simplify your codebase by hiding repetitive code behind concise annotations.
+	3.	Reduced Errors: Minimize manual implementation mistakes by relying on pre-defined macros.
+
 5. Benefits of macros. 
 a. Generates the code thats easier to read
 b. Easier to maintain than manually coded version. 
@@ -59,7 +121,11 @@ Macros declaration and definition are seperate.
 Declaration -> contains its name, the parameters it takes, where it can be used, and what kind of code it generates.
 Definition/Implementations -> Contains the code that expands the macro by generating Swift code. 
 
-7. Explain Macro Declaration
+7. Keypoints to remember about Macros
+	1.	Macros are a compile-time feature.
+	2.	They save time and reduce human error by automating repetitive tasks.
+	3.	They are flexible and can apply to functions, structs, enums, and more.
+	4.	They improve performance since the generated code is part of your app at compile time, with no runtime overhead.
 
 8. Explain Macro Expansion 
 When building Swift code that uses macros, the compiler calls the macros implementation and expand them. 
