@@ -5,7 +5,8 @@ Functions are self-contained chunks of code that perform a specific task.
 
 2. What is the idenitifacation for the function?
 Name of the function is an idenifier, when you called by that name, particluar functionality will be executed.
-Every function in Swift has a type, consisting of the function’s parameter types and return type. You can use this type like any other type in Swift, which makes it easy to pass functions as parameters to other functions, 
+Every function in Swift has a type, consisting of the function’s parameter types and return type. 
+You can use this type like any other type in Swift, which makes it easy to pass functions as parameters to other functions, 
 and to return functions from functions.
 Functions can also be written within other functions to encapsulate useful functionality within a nested function scope.
 Every function has a function name, which describes the task that the function performs.
@@ -40,7 +41,9 @@ print(greeting(for: "Dave"))
 // Prints "Hello, Dave!"
 
 8. What is argument lable and parameter label
-Each function parameter has both an argument label and a parameter name. The argument label is used when calling the function; each argument is written in the function call with its argument label before it. The parameter name is used in the implementation of the function. 
+Each function parameter has both an argument label and a parameter name. The argument label is used when calling the function; 
+each argument is written in the function call with its argument label before it. 
+The parameter name is used in the implementation of the function. 
 By default, parameters use their parameter name as their argument label.
 
 9. How you specify argument label?
@@ -121,9 +124,8 @@ This behavior is known as copy-in copy-out or call by value result.
 its getter is called as part of the function call and its setter is called as part of the function return.
 
 As an optimization, when the argument is a value stored at a physical address in memory, 
-the same memory location is used both inside and outside the function body. The optimized behavior is known as call by reference.
- it satisfies all of the requirements of the copy-in copy-out model while removing the overhead of copying.
-
+the same memory location is used both inside and outside the function body.
+The optimized behavior is known as "call by reference", it satisfies all of the requirements of the copy-in copy-out model while removing the overhead of copying.
 
 24. Why shouldn't access a value that was passed as an in-out argument?
 Within a function, don’t access a value that was passed as an in-out argument, 
