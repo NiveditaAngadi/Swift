@@ -6,7 +6,7 @@ In swift, structures and classes are defined in the single file.
 a. Define properties to store values 
 b. Define methods to provide functionality 
 c. Define subscripts to provide access to their values using subscript syntax
-d. Define initialisers to set up their initial values. 
+d. Define initializers to set up their initial values. 
 e. Be extended to expand their functionality beyond a default implementations. 
 f. confirm to protocols to provide standard functionality of a certain kind. 
 
