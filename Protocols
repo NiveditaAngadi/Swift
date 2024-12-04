@@ -43,8 +43,8 @@ protocol RandomNumberGenerator {
 
 5. Can protocol define mutating methods?
 Yes. Protocol can define the mutating method where it has the permission to modify (or mutate) the instance it belongs to. 
-For instance methods on value types (that is, structures and enumerations) you place the mutating keyword before a method’s func keyword to indicate that the method is allowed to modify the instance it belongs to and 
-any properties of that instance.
+For instance methods on value types (that is, structures and enumerations) you place the mutating keyword before 
+a method’s func keyword to indicate that the method is allowed to modify the instance it belongs to and any properties of that instance.
 
 Protocol Togglable {
  mutating func toggle() 
@@ -85,9 +85,12 @@ class SomeSubClass: SomeClass, SomeProtocol {
 
 7. Can protcol define failable initializers?
 Yes. 
+A failable initializer requirement can be satisfied by a failable or nonfailable initializer on a conforming type. 
+A nonfailable initializer requirement can be satisfied by a nonfailable initializer or an implicitly unwrapped failable initializer.
 
 8. Can protocol used as type. 
 Yes. The most common way to use a protocol as a type is to use a protocol as a generic constraint. 
+Such as Opaque and Box type.
 
 9. What is delegation?
 Delegation is a design pattern that enables a class or structure to hand off (or delegate) some of its responsibilities to an instance 
@@ -95,8 +98,6 @@ of another type.
 This design pattern is implemented by defining a protocol that encapsulates the delegated responsibilities, 
 such that a conforming type (known as a delegate) is guaranteed to provide the functionality that has been delegated. 
 
-The design pattern is implemented by using protocol that encapsulates the delegated responsibilities, such as confirming type (known as delegate)
-is guaranteed to provide the functionality that has been delegated. 
 Delegation can be used to respond to particular action, or to retrieve data from an external source without needing to know the underlying type of 
 the source. 
 
@@ -152,6 +153,21 @@ Optional requirements are available so that you can write code that interoperate
 Both the protocol and the optional requirement must be marked with the @objc attribute. 
 Note that @objc protocols can be adopted only by classes, not by structures or enumerations.
 
+Optional methods are supported only in Objective-C-compatible protocols, annotated with @objc. Such protocols can be used only by classes.
+
+@objc protocol OptionalProtocol {
+    @objc optional func optionalMethod()
+}
+
+class MyClass: OptionalProtocol {
+    func optionalMethod() {
+        print("Optional method implemented")
+    }
+}
+
+let instance: OptionalProtocol = MyClass()
+instance.optionalMethod?() // Output: Optional method implemented
+
 20. Explain protocol extension. 
 Protocol can be extended to provide method, initialiser, subscript, and computed property implementations to conforming types. 
 This allows you to define behavior on protocols themselves, rather than in each type's individual conformance or in global function. 
@@ -170,16 +186,305 @@ extension Collection where Element: Equatable {
 }
 
 22. Define a protocol in swift and explain common use cases. 
+	A protocol defines a blueprint of methods, properties, and other requirements that suit a particular task or functionality. Classes, structs, or enums can conform to protocols to adopt the specified behavior.
+	
+ •	Unlike classes, protocols: Do not provide implementation.
+ •	Can be adopted by structs and enums in addition to classes.
+ •	Support multiple inheritance (a type can conform to multiple protocols).
 
-23. How do you adopt a protocol in swift?
+protocol Greetable {
+    var name: String { get }
+    func greet() -> String
+}
+
+struct Person: Greetable {
+    var name: String
+    func greet() -> String {
+        return "Hello, \(name)"
+    }
+}
+
+23. Can protocols have properties and methods with default implementations? How?
+protocol Greetable {
+    var name: String { get }
+    func greet() -> String
+}
+
+extension Greetable {
+    func greet() -> String {
+        return "Hi, \(name)"
+    }
+}
+
+struct Person: Greetable {
+    var name: String
+}
+
+let john = Person(name: "John")
+print(john.greet()) // Output: Hi, John
+
+24. Provide the examples of protocol composition.
+protocol Drivable {
+    func drive()
+}
+
+protocol Repairable {
+    func repair()
+}
+
+struct Vehicle: Drivable, Repairable {
+    func drive() {
+        print("Driving")
+    }
+
+    func repair() {
+        print("Repairing")
+    }
+}
+
+func operate(vehicle: Drivable & Repairable) {
+    vehicle.drive()
+    vehicle.repair()
+}
+
+let car = Vehicle()
+operate(vehicle: car)
+// Output:
+// Driving
+// Repairing
+
+24. How do you adopt a protocol in swift?
 
 24. Explain how extension are used in swift?
 
 25. What are protcol extensions and how do they differ from traditional extensions?
+	•	Protocol extensions allow you to add default behavior to all types that conform to a protocol.
+	•	Regular extensions add behavior to a specific type.
+
+protocol Greetable {
+    func greet()
+}
+
+extension Greetable {
+    func greet() {
+        print("Hello from Protocol Extension")
+    }
+}
+
+struct Person: Greetable {}
+let person = Person()
+person.greet() // Output: Hello from Protocol Extension
+
+Protocol extensions apply to all conforming types, while regular extensions modify a single type.
 
 26. How can protocols be used to achieve polymorphism in Swift?
+Polymorphism in Swift is the ability to write code that can operate on objects of different types through a common interface. 
+Protocols play a central role in achieving polymorphism 
+because they allow you to define a shared blueprint that multiple types can conform to, enabling the use of protocol types as a means of abstraction.
 
-27. Discuss the concept of protocol composition in Swift?
+How Protocols Enable Polymorphism
+1.	Common Interface: Protocols define a common set of requirements (methods, properties, etc.) that conforming types must implement. 
+This allows objects of different types to be treated uniformly.
+2.	Dynamic Dispatch: When working with protocol types (e.g., any Protocol), Swift uses "dynamic dispatch" to call the appropriate implementation of a method at runtime.
+3.	Abstraction: Protocols decouple code from specific implementations, making it flexible, reusable, and extensible.
 
-28. What are associated types in Swift Protcol?
+// Define a protocol
+protocol Shape {
+    func area() -> Double
+}
+
+// Conform different types to the protocol
+struct Circle: Shape {
+    var radius: Double
+    func area() -> Double {
+        return Double.pi * radius * radius
+    }
+}
+
+struct Rectangle: Shape {
+    var width: Double
+    var height: Double
+    func area() -> Double {
+        return width * height
+    }
+}
+
+struct Triangle: Shape {
+    var base: Double
+    var height: Double
+    func area() -> Double {
+        return 0.5 * base * height
+    }
+}
+
+// Use polymorphism with the protocol
+func printArea(of shape: Shape) {
+    print("The area is \(shape.area())")
+}
+
+// Instantiate different types
+let circle = Circle(radius: 5)
+let rectangle = Rectangle(width: 4, height: 6)
+let triangle = Triangle(base: 3, height: 5)
+
+// Pass different types to the same function
+printArea(of: circle)       // Output: The area is 78.53981633974483
+printArea(of: rectangle)    // Output: The area is 24.0
+printArea(of: triangle)     // Output: The area is 7.5
+
+Protocol Type (Existential)
+
+In the example above, the parameter shape is of type Shape, 
+allowing the function to accept any type that conforms to the Shape protocol. This is an example of type abstraction and demonstrates polymorphism in action.
+
+Real-World Use Case: Dependency Injection
+
+Protocols are commonly used to achieve polymorphism in real-world scenarios such as dependency injection, where different implementations of a protocol can be injected into a system dynamically.
+Networking Abstraction
+// Define a protocol for networking
+protocol NetworkService {
+    func fetchData(from url: String, completion: @escaping (Data?) -> Void)
+}
+
+// Different implementations of the protocol
+class APIClient: NetworkService {
+    func fetchData(from url: String, completion: @escaping (Data?) -> Void) {
+        // Simulated API call
+        print("Fetching data from API: \(url)")
+        completion(Data())
+    }
+}
+
+class MockClient: NetworkService {
+    func fetchData(from url: String, completion: @escaping (Data?) -> Void) {
+        // Simulated mock data
+        print("Fetching mock data for: \(url)")
+        completion(Data("Mock Data".utf8))
+    }
+}
+
+// Using polymorphism
+func performNetworkOperation(using service: NetworkService) {
+    service.fetchData(from: "https://example.com") { data in
+        print("Data received: \(data?.count ?? 0) bytes")
+    }
+}
+
+// Inject different implementations
+let apiClient = APIClient()
+let mockClient = MockClient()
+
+performNetworkOperation(using: apiClient) // Output: Fetching data from API: https://example.com
+performNetworkOperation(using: mockClient) // Output: Fetching mock data for: https://example.com
+
+Benefits of Using Protocols for Polymorphism
+
+	1.	Code Reusability: Allows writing reusable and testable code.
+	2.	Abstraction: Hides implementation details, focusing on what needs to be done.
+	3.	Flexibility: Easily switch between implementations without changing dependent code.
+	4.	Extensibility: Add new conforming types without modifying existing code.
+
+
+27. What are associated types in Swift Protcol?
+Can you use protocols with associated types?
+Yes, protocols can define associated types using the associatedtype keyword, which acts as a placeholder until the conforming type specifies the actual type.
+
+protocol Container {
+    associatedtype Item
+    var items: [Item] { get set }
+    mutating func add(_ item: Item)
+}
+
+struct IntContainer: Container {
+    var items: [Int] = []
+
+    mutating func add(_ item: Int) {
+        items.append(item)
+    }
+}
+
+var container = IntContainer()
+container.add(5)
+print(container.items) // Output: [5]
+
+28. What are existential types, and how are they used with protocols?
+Existential types (any) allow the use of a protocol as a type, enabling polymorphism. 
+The any keyword explicitly tells the compiler that you’re working with a protocol type, not a concrete type.
+
+protocol Describable {
+    func describe() -> String
+}
+
+struct Book: Describable {
+    func describe() -> String {
+        return "A book"
+    }
+}
+
+let describable: any Describable = Book()
+print(describable.describe()) // Output: A book
+
+29.  How does Swift ensure protocol conformance?
+Swift enforces compile-time conformance by:
+	1.	Ensuring all required methods and properties are implemented in conforming types.
+	2.	Using @available attributes for version-specific conformance.
+
+protocol Printable {
+    func printDetails()
+}
+
+struct Document: Printable {
+    func printDetails() {
+        print("Printing document details")
+    }
+}
+
+let doc = Document()
+doc.printDetails() // Output: Printing document details
+
+If a required method is missing, the compiler raises an error.
+
+30. Can you create a protocol with a generic constraint?
+Yes, you can use generic constraints to ensure that only specific types can conform to a protocol.
+
+protocol Stackable {
+    associatedtype Element
+    func push(_ element: Element)
+    func pop() -> Element?
+}
+
+struct IntStack: Stackable {
+    private var stack: [Int] = []
+
+    func push(_ element: Int) {
+        stack.append(element)
+    }
+
+    func pop() -> Int? {
+        return stack.popLast()
+    }
+}
+
+31. What is the use of Self in a protocol?
+The Self keyword refers to the type that conforms to the protocol. It is used to:
+	1.	Specify that methods must return the conforming type.
+	2.	Restrict protocol conformance to certain types.
+
+protocol Copyable {
+    func copy() -> Self
+}
+
+struct Document: Copyable {
+    func copy() -> Self {
+        return self
+    }
+}
+
+32. Generic Protocol Constraints: Use protocols with generics for type-safe polymorphism.
+func calculateAreas<T: Shape>(shapes: [T]) -> [Double] {
+    return shapes.map { $0.area() }
+}
+
+33. 	Existential Types (any): Swift 5.7 introduced explicit any Protocol syntax to work with protocol types.
+Protocols are a cornerstone of Swift’s type system and a powerful way to achieve polymorphism, making your code modular, testable, and scalable. 
 
