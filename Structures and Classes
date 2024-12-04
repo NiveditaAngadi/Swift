@@ -20,6 +20,10 @@ d. Reference counting allows more than one reference to a class instance.
 Local reasoning will be complex in case of classes. 
 Capabilities that class support come at the cost of increased complexity. 
 
+Local reasoning:
+Being able to look through code in a single spot and figure out what is going on is called local reasoning. 
+Now imagine a larger program where different pieces of the program all have a reference to the same thing.
+
 4. Explain the syntax of structure. 
 Whenever you define a new structure or class, you define a new Swift type
 struct SomeStructure {
@@ -50,7 +54,9 @@ A value type is a type whose value is copied when it's assigned to a variable or
 Structure and Enumeration are value types. 
 
 10. Explain swift optimazation techniques while copying value type.
-Collections defined by the Swift standard library like arrays, dictionaries, and strings use an optimization to reduce the performance cost of copying. Instead of making a copy immediately, these collections share the memory where the elements are stored between the original instance and any copies. If one of the copies of the collection is modified, the elements are copied just before the modification. 
+Collections defined by the Swift standard library like arrays, dictionaries, and strings use an optimization to reduce the performance cost of copying. 
+Instead of making a copy immediately, these collections share the memory where the elements are stored between the original instance and any copies. 
+If one of the copies of the collection is modified, the elements are copied just before the modification. 
 The behavior you see in your code is always as if a copy took place immediately.
 
 11. Explain about reference type. 
@@ -65,6 +71,94 @@ To enable this, Swift provides two identity operators:
 Identical to (===)
 Not identical to (!==)
 Use these operators to check whether two constants or variables refer to the same single instance.
- Identical to means that two constants or variables of class type refer to exactly the same class instance. Equal to means that two instances are considered equal or equivalent in value, 
+Identical to means that two constants or variables of class type refer to exactly the same class instance. 
+Equal to means that two instances are considered equal or equivalent in value, 
 
+13. What are the main differences between a structure and a class in Swift?
+Feature	Structure (struct)	Class
+Inheritance	No	Yes
+Reference Type	Structures - No, structs are value types	Classes - Yes, classes are reference types
+Memory Management	Structures - Copy-on-write (value semantics)	Classes - Reference counting (ARC)
+Mutability	Structures - Immutable unless marked mutating	classes - Mutable by default
+Identity	Structures - No identity (compared by value)	Classes - Identity through object references
+struct PersonStruct {
+    var name: String
+}
+
+class PersonClass {
+    var name: String
+    init(name: String) {
+        self.name = name
+    }
+}
+
+// Value type behavior
+var john = PersonStruct(name: "John")
+var copyJohn = john
+copyJohn.name = "Mike"
+print(john.name) // Output: John
+
+// Reference type behavior
+var jane = PersonClass(name: "Jane")
+var referenceJane = jane
+referenceJane.name = "Mary"
+print(jane.name) // Output: Mary
+
+14. When should you prefer using a struct over a class?
+You should prefer structs in the following scenarios:
+	•	When the data is simple and unlikely to be shared across multiple objects.
+	•	When you want value semantics to prevent unintended side effects from shared state.
+	•	For types that represent immutable values, such as Point, Rectangle, or Date.
+
+Use classes when:
+	•	You need inheritance or polymorphism.
+	•	The object lifecycle needs to be shared and tracked.
+	•	You’re working with resource-intensive operations that benefit from reference semantics.
+
+15. Can structs have deinitializers? Why or why not?
+No, structs cannot have deinitializers because they are value types and their lifecycle is managed by copying and dropping values. 
+Classes, being reference types, can have deinitializers since their memory is explicitly managed by ARC.
+
+16. What is the difference between constant structs (let) and constant classes (let)?
+	•	Structs: A let struct instance means all its properties are immutable.
+	•	Classes: A let class instance prevents reassigning the reference but allows modifying properties.
+
+struct StructExample {
+    var value: Int
+}
+
+class ClassExample {
+    var value: Int
+    init(value: Int) {
+        self.value = value
+    }
+}
+
+let structInstance = StructExample(value: 10)
+// structInstance.value = 20 // Error: Cannot assign to property
+
+let classInstance = ClassExample(value: 10)
+classInstance.value = 20 // Allowed
+print(classInstance.value) // Output: 20
+
+17. How do classes and structs handle immutability differently?
+ - Structs: Immutability is enforced by default unless marked mutating.
+ - Classes: Mutable by default; properties can be changed unless explicitly marked as let or private(set).
+
+18. Can structs or classes have lazy properties?
+Both structs and classes can have lazy properties, but lazy properties in structs are immutable if the instance is declared with let.
+
+struct LazyStruct {
+    lazy var text = "Lazy initialization"
+}
+
+class LazyClass {
+    lazy var text = "Lazy initialization"
+}
+
+var structInstance = LazyStruct()
+print(structInstance.text) // Works if struct is mutable
+
+let classInstance = LazyClass()
+print(classInstance.text) // Works always
 
