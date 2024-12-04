@@ -89,7 +89,8 @@ You can also subclass any open class that’s defined in a different module. A s
 you can’t write a public subclass of an internal superclass.
 
 13. Access levels of getter and setter. 
-Getters and setters for constants, variables, properties, and subscripts automatically receive the same access level as the constant, variable, property, or subscript they belong to.
+Getters and setters for constants, variables, properties, and subscripts automatically receive the same access level as the constant, variable, property, 
+or subscript they belong to.
 You can give a setter a lower access level than its corresponding getter, to restrict the read-write scope of that variable, property, or subscript. 
 You assign a lower access level by writing fileprivate(set), private(set), internal(set), or package(set) before the var or subscript introducer.
 
