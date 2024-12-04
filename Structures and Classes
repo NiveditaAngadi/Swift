@@ -16,7 +16,6 @@ b. Type casting enables you to check and interpret the type of a class instance 
 c. Deinitializers enable an instance of a class to free up any resources it has assigned. 
 d. Reference counting allows more than one reference to a class instance. 
 
-
 3. Why structures compare to classes?
 Local reasoning will be complex in case of classes. 
 Capabilities that class support come at the cost of increased complexity. 
