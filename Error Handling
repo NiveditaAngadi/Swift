@@ -127,5 +127,55 @@ Deferred actions are executed in the reverse of the order that they’re written
 the code in the second defer statement executes second to last, and so on.
 The last defer statement in source code order executes first.
 
+12. In Objective-C, how error is handled?
+Using the NSError objects passed as pointers to methods or exceptions for error handling. 
 
+13. What is rethrows? When would you use it?
+rethrows is used in function declarations to indicate that the function can throw errors only if one of its parameter is a throwing function. 
 
+Use rethrows to propogate errors from a closure parameter while maintaining flexibility if non-throwing closure. 
+func performOperation(_ operation: () throws -> Void)rethrows {
+    try operation()
+}
+
+do {
+  try performOperation { 
+    throw FileError.fileNotFound
+ }
+} catch {
+ print("Caught error: \(error)")
+}
+
+14. Can you explain the difference between "throws" and "throw"?
+throws: Used in function declarations to indicate the function can throw an error. 
+func  riskyOperation() -> throws {
+}
+
+throw: Used inside a throwing function to throw a specific error. 
+throw NetworkError.noData 
+
+15. How would you design an error-handling strategy for a large swift application?
+
+1. Define custom Error types.
+Group errors by domain(e.g: Network, Database)
+
+enum NetworkError: Error {
+ case noInternet
+ case timeOut
+}
+
+2. Centralise error logging
+Use a common logger to log error consistently 
+
+func logError(_ error: Error) {
+print("Error logged: \(error)")
+}
+
+3. Greaceful error propogation 
+Use clear error messages for UI feedback 
+
+4. Fallback mechanism 
+Implement retry logic or alternative flows for recoverable errors.
+
+5. Testing 
+Use mock errors to simulate and test edge cases.
