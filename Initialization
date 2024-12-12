@@ -24,8 +24,8 @@ Property of optional type are automatically initialized to nil.
 No. 
 
 8. What is default initializer?
-Swift provides a default initializer for any structure or class that provides default values for all of its properties. The default initializer simply creates a new instance with all of 
-its properties set to their default values.
+Swift provides a default initializer for any structure or class that provides default values for all of its properties. 
+The default initializer simply creates a new instance with all of its properties set to their default values.
 
 9. What is memberwise initializer for structure types?
 Structure types automatically receive a memberwise initializer if they don’t define any of their own custom initializers. 
@@ -56,15 +56,16 @@ These are known as designated initializers and convenience initializers.
 
 15. What is designated initializers?
 Designated initializers are the primary initializers for a class. 
-A designated initializer fully initializes all properties introduced by that class and calls an appropriate superclass initializer to continue the initialization process continues up 
-the superclass chain. 
+A designated initializer fully initializes all properties introduced by that class 
+and calls an appropriate superclass initializer to continue the initialization process continues up the superclass chain. 
 
 init(<#parameters#>) {
 <#statements#>
 }
 
 16. What is conveniece initializers?
-Convenience initializers are secondary initializers for a class. You can define a convenience initializers to call a designated initilizer from the same class as the convenience initializers 
+Convenience initializers are secondary initializers for a class.
+You can define a convenience initializers to call a designated initilizer from the same class as the convenience initializers 
 with some of the designated initializers parameters set to defalut values. 
 You can also define a convenience initializer to create an instance of that class for a specific use case or input value type.
 Providing the convenience initializer is optional/need basis. 
@@ -90,7 +91,8 @@ Convenience initializers must always delegate across.
 
 18. What is two-phase initialization?
 Class initialization in Swift is a two-phase process. 
-In the first phase, each stored property is assigned an initial value by the class that introduced it. Once the initial state for every stored property has been determined,
+In the first phase, each stored property is assigned an initial value by the class that introduced it. 
+Once the initial state for every stored property has been determined,
 the second phase begins, and each class is given the opportunity to customize its stored properties further before the new instance is considered ready for use. 
 
 19. Why two-phase initialization?
@@ -105,7 +107,8 @@ that isn’t fully or correctly initialized.
 
 21. What will be the solution if subclass present same initializers as its superclass?
 Provide the custom implementation of those initializers within the subclass. 
-When you write a subclass initializer that matches a superclass designated initializer, you are effectively providing an override of that designated initializer. 
+When you write a subclass initializer that matches a superclass designated initializer, 
+you are effectively providing an override of that designated initializer. 
 Therefore, you must write the override modifier before the subclass’s initializer definition. 
 Note that, 
 Conversely, if you write a subclass initializer that matches a superclass convenience initializer, 
@@ -159,7 +162,8 @@ up to the superclass initializer is to force-unwrap the result of the failiable 
 
 27. How do you make sure that subclass must implement initializer of superclass?
 By "required" modifier before the definition of a class initializer to indicate that every subclass of the class must implement that initializer. 
-You must also write the required modifier before every subclass implementation of a required initializer, to indicate that the initializer requirement applies to further subclasses in the chain. 
+You must also write the required modifier before every subclass implementation of a required initializer, 
+to indicate that the initializer requirement applies to further subclasses in the chain. 
 You don’t write the override modifier when overriding a required designated initializer:
 
 class SomeClass {
@@ -187,6 +191,103 @@ Note that the closure’s end curly brace is followed by an empty pair of parent
 This tells Swift to execute the closure immediately. If you omit these parentheses, 
 you are trying to assign the closure itself to the property, and not the return value of the closure.
 
+29. Why use private initializers in Swift?
+A private initializers in Swift restricts the creation of an object to within its defining scope. This is particularly useful in scenarios where you 
+want to control or limit how and when an instance of a class or structure is created. 
+
+Private initializers are a powerful tool in Swift for controlling object creation. 
+They are essential in patterns like singletons, factory methods, and utility classes, and help ensure proper encapsulation and design consistency.
+
+1. Singleton Pattern 
+Private initializer ensures that only one instance of a class in created by restricting external instantiation. This is the foundation of Singleton pattern. 
+
+class Signleton {
+    static let shared = Signleton()
+
+    private init() {
+      print("Singleton instance created")
+    }
+}
+
+The private initializer enforces the singleton pattern by disallowing other parts of the code from creating new instances of the class.
+
+2. Utility Classes
+If a class is designed to contain only static method and property, a private initializer prevents it from being instantiated unnecessarily. 
+A private initializer ensures the class is used as intended—a container for utility methods—and prevents accidental instantiation.
+
+class MathUtilities {
+    private init() {} // Prevent instantiation
+    
+    static func add(_ a: Int, _ b: Int) -> Int {
+        return a + b
+    }
+}
+
+// Usage:
+let sum = MathUtilities.add(5, 3)
+// let utility = MathUtilities() // Error: 'MathUtilities' initializer is inaccessible
+
+3. Restrict initialization in Frameworks or Libraries
+When creating frameworks or libraries, private initializers can restrict the creation of objects, exposing only the intended API's to user. 
+This prevents external developers from creating instances of internal helper classes that aren’t part of the intended API.
+
+public class LibraryHelper {
+    private init() {} // Internal-only usage
+    
+    public static func fetchVersion() -> String {
+        return "1.0.0"
+    }
+}
+
+4.  Custom Factory Methods
+A private initializer can enforce the use of factory methods to create objects, allowing for more controlled instantiation.
+By using private initializers, the class can manage its instantiation process, ensuring only predefined types are created.
+
+class Vehicle {
+    let type: String
+    
+    private init(type: String) { // Only accessible within the class
+        self.type = type
+    }
+    
+    static func createCar() -> Vehicle {
+        return Vehicle(type: "Car")
+    }
+    
+    static func createBike() -> Vehicle {
+        return Vehicle(type: "Bike")
+    }
+}
+
+// Usage:
+let car = Vehicle.createCar()
+let bike = Vehicle.createBike()
+// let vehicle = Vehicle(type: "Truck") // Error: 'init(type:)' is inaccessible
+
+5. Immutable Shared Constants
+A private initializer can be used to enforce immutability for shared constants or settings.
+This ensures the settings are immutable and consistent across the app.
+
+struct AppSettings {
+    static let shared = AppSettings() // Shared instance
+    
+    private init() {} // Prevent external instantiation
+    
+    let appName = "MyApp"
+    let version = "1.0"
+}
+
+// Usage:
+let settings = AppSettings.shared
+print(settings.appName)
+// let newSettings = AppSettings() // Error: 'AppSettings' initializer is inaccessible
 
 
+30. Benefits of Private Initializers.
+Benefits of Private Initializers
+	1.	Encapsulation: Restricts external access, enforcing intended use.
+	2.	Control: Centralizes instance creation logic, reducing the risk of misuse.
+	3.	Optimization: Ensures that resources like singletons or utility classes are not unnecessarily instantiated.
+	4.	Cleaner API: Prevents users of a framework or library from misusing internal classes.
 
+31. 
