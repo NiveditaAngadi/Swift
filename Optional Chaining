@@ -6,7 +6,7 @@ An optional represents two possibilities, either there is a value and you can un
 at all. 
 
 enum OptionalValue<T> {
-case none //Represents the absence of value 
+case none //Represents the absence of value - value less state 
 case some(T) 
 }
 
