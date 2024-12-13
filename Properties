@@ -88,7 +88,7 @@ print(viewModel.oldest)
 
 viewModel.people.append(Person(name: "Jan", age: 69))
 print(viewModel.oldest)
-// Prints: Person(name: "Antoine", age: 30) // After initailzing variablwe once, its done. It wont calculate again. 
+// Prints: Person(name: "Antoine", age: 30) // After initailzing variable once, its done. It wont calculate again. 
 
 11. When to use computed property and lazy property?
 When you want to consider the actual state of the instance for the calculation, then go for computed property. 
@@ -117,7 +117,7 @@ Computed properties calcute values.
 Provided by classes,structures and enumerations. 
 Associated with the instance of a particular type. 
 
-Compueted properties don't store values, instead they compute values. Provide a getter and an optional setter to retrieve and set other peoperties and values indirectly. 
+Computed properties don't store values, instead they compute values. Provide a getter and an optional setter to retrieve and set other peoperties and values indirectly. 
 
 struct Point {
     var x = 0.0, y = 0.0
@@ -497,15 +497,15 @@ rect.area = 25.0 // Triggers the setter
 
 41. How do property attributes like @Published and @State differ?
 @Published:
-	•	Used in combination with ObservableObject for binding data in a SwiftUI environment.
-	•	Triggers updates when the value changes.
+	• Used in combination with ObservableObject for binding data in a SwiftUI environment.
+	• Triggers updates when the value changes.
 
 class Model: ObservableObject {
     @Published var data: String = "Hello"
 }
 
 @State:
-	•	Used for local state in SwiftUI views. Does not trigger updates to external views or objects.
+	• Used for local state in SwiftUI views. Does not trigger updates to external views or objects.
 
 struct ContentView: View {
     @State private var counter = 0
@@ -518,8 +518,8 @@ struct ContentView: View {
 
 42. What are the default values for properties in Swift?
 Properties must be initialized during declaration or in the initializer. However:
-	•	Optional properties default to nil.
-	•	Static properties can have default values.
+	• Optional properties default to nil.
+	• Static properties can have default values.
 
 struct User {
     var name: String = "Guest" // Default value
