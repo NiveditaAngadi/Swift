@@ -75,7 +75,7 @@ print(name!) // Use only when you are certain it's not nil.
 
 7.  What is the difference between nil in Objective-C and nil in Swift? 
     • In Objective-C, nil is a pointer to a non-existent object, and sending a message to nil is a no-op.
-	• In Swift, nil is not a pointer but represents the absence of a value for any type, including non-objects like Int or Bool. 
+    • In Swift, nil is not a pointer but represents the absence of a value for any type, including non-objects like Int or Bool. 
     Attempting to use nil without unwrapping an Optional results in a compile-time error.
 
 struct Person {
