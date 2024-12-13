@@ -6,7 +6,8 @@ Closures are self-contained blocks of functionality that can be passed around an
 Its simillar to block in another programming language. 
 
 2. What is closing over?
-Closures can capture and store references to any constants and variables from the context in which they're defined. This is known as closing over those constants and variables. 
+Closures can capture and store references to any constants and variables from the context in which they're defined. 
+This is known as closing over those constants and variables. 
 Swift handles all of the memory management of capturing for you. 
 
 3. Explain different forms of closures.
@@ -68,7 +69,8 @@ If you assign a closure to two different constants or variables, both of those c
 
 10. What is esacping closure?
 A closure is said to escape a function when closure is passed as an argument to the function, but is called after the function returns.
-When you declare a function that takes a closure as one of its parameters, you can write @escaping before the parameter’s type to indicate that the closure is allowed to escape.
+When you declare a function that takes a closure as one of its parameters, 
+you can write @escaping before the parameter’s type to indicate that the closure is allowed to escape.
 
 11. Ways of escaping the closure.
 One way that a closure can escape is by being stored in a variable that’s defined outside the function.
