@@ -54,7 +54,8 @@ class Apartment {
 and so a weak reference is an appropriate way to break the reference cycle in this case.
 
 7. Why weak reference is always variable?
-Weak references need to allow their value to be changed to nil at runtime, they’re always declared as variables, rather than constants, of an optional type.
+Weak references need to allow their value to be changed to nil at runtime, they’re always declared as variables, 
+rather than constants, of an optional type.
 
 6. When should use Unowned reference?
 Like a weak reference, an unowned reference doesn’t keep a strong hold on the instance it refers to. Unlike a weak reference, 
